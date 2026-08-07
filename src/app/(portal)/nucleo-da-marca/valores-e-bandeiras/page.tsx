@@ -8,14 +8,14 @@ export default function ValoresEBandeirasPage() {
       <PageTitle title={valoresEBandeiras.title} />
 
       <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl bg-petroleo p-7">
+        <div className="rounded-3xl border border-brasa/30 bg-brasa/10 p-7">
           <p className="mb-1 text-xs font-medium tracking-wide text-brasa">
             {valoresEBandeiras.central.label}
           </p>
           <h2 className="mb-3 text-lg font-medium text-bruma-light">
             {valoresEBandeiras.central.name}
           </h2>
-          <p className="text-sm font-light leading-relaxed text-bruma">
+          <p className="text-sm font-light leading-relaxed text-bruma-light/70">
             {valoresEBandeiras.central.text}
           </p>
         </div>

@@ -17,10 +17,24 @@
 }
 
 body {
-  background: var(--color-bruma-light);
-  color: var(--color-petroleo);
+  background: var(--color-petroleo);
+  color: var(--color-bruma-light);
   font-family: var(--font-sans), sans-serif;
   font-weight: 400;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-bruma-light) 12%, transparent);
+  border-radius: 999px;
 }
 
 .dot-brasa::after {

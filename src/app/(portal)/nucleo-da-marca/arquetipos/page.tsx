@@ -15,8 +15,8 @@ export default function ArquetiposPage() {
         ))}
       </div>
 
-      <div className="mt-4 rounded-2xl bg-bruma p-7">
-        <p className="text-sm font-light leading-relaxed text-petroleo/80">
+      <div className="mt-4 rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-7">
+        <p className="text-sm font-light leading-relaxed text-bruma-light/65">
           {arquetipos.closing}
         </p>
       </div>

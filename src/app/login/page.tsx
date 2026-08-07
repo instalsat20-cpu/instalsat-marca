@@ -37,22 +37,22 @@ function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-bruma-light px-4">
+    <div className="flex min-h-screen items-center justify-center bg-petroleo px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <p className="text-sm font-medium tracking-wide text-petroleo/70">
+          <p className="text-sm font-medium tracking-wide text-bruma-light/50">
             Instalsat
           </p>
-          <h1 className="mt-1 text-2xl font-semibold text-petroleo">
+          <h1 className="mt-1 text-2xl font-semibold text-bruma-light">
             Biblioteca de marca<span className="text-brasa">.</span>
           </h1>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="rounded-2xl bg-white p-8 shadow-sm"
+          className="rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-8"
         >
-          <label className="mb-1 block text-sm font-medium text-petroleo/80">
+          <label className="mb-1 block text-sm font-medium text-bruma-light/70">
             E-mail
           </label>
           <input
@@ -60,11 +60,11 @@ function LoginForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mb-4 w-full rounded-lg border border-bruma bg-bruma-light px-3 py-2 text-sm text-petroleo outline-none focus:border-petroleo"
+            className="mb-4 w-full rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2.5 text-sm text-bruma-light outline-none transition placeholder:text-bruma-light/30 focus:border-bruma-light/25"
             placeholder="voce@instalsat.com.br"
           />
 
-          <label className="mb-1 block text-sm font-medium text-petroleo/80">
+          <label className="mb-1 block text-sm font-medium text-bruma-light/70">
             Senha
           </label>
           <input
@@ -72,7 +72,7 @@ function LoginForm() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mb-6 w-full rounded-lg border border-bruma bg-bruma-light px-3 py-2 text-sm text-petroleo outline-none focus:border-petroleo"
+            className="mb-6 w-full rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2.5 text-sm text-bruma-light outline-none transition placeholder:text-bruma-light/30 focus:border-bruma-light/25"
             placeholder="••••••••"
           />
 
@@ -83,7 +83,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-petroleo py-2.5 text-sm font-medium text-bruma-light transition hover:opacity-90 disabled:opacity-60"
+            className="w-full rounded-xl bg-brasa py-3 text-sm font-medium text-bruma-light transition hover:opacity-90 disabled:opacity-60"
           >
             {loading ? "Entrando..." : "Entrar"}
           </button>

@@ -15,7 +15,7 @@ export default function PropositoPage() {
         ))}
       </div>
 
-      <div className="mt-4 rounded-2xl bg-petroleo p-7">
+      <div className="mt-4 rounded-3xl bg-brasa p-7">
         <p className="text-lg font-medium text-bruma-light">
           {proposito.sintese}
         </p>

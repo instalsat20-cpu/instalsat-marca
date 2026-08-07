@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR" className={`${rubik.variable} h-full antialiased`}>
-      <body className="min-h-full bg-bruma-light text-petroleo">
+      <body className="min-h-full bg-petroleo text-bruma-light">
         <Providers>{children}</Providers>
       </body>
     </html>

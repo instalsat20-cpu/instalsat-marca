@@ -15,8 +15,8 @@ export default function GrafismosPage() {
         ))}
       </div>
 
-      <div className="rounded-2xl bg-bruma p-6">
-        <p className="text-sm font-light leading-relaxed text-petroleo/80">
+      <div className="rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-6">
+        <p className="text-sm font-light leading-relaxed text-bruma-light/65">
           {grafismos.regra}
         </p>
       </div>

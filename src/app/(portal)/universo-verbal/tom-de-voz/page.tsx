@@ -15,7 +15,7 @@ export default function TomDeVozPage() {
         {tomDeVoz.vozE.map((v) => (
           <div
             key={v}
-            className="rounded-xl bg-bruma px-4 py-3 text-center text-sm font-medium text-petroleo"
+            className="rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-4 py-3 text-center text-sm font-medium text-bruma-light"
           >
             {v}
           </div>

@@ -13,7 +13,7 @@ export default function VocabularioPage() {
             {vocabulario.pertence.items.map((word) => (
               <span
                 key={word}
-                className="rounded-full bg-bruma px-3 py-1 text-xs font-medium text-petroleo"
+                className="rounded-full border border-bruma-light/10 bg-bruma-light/5 px-3 py-1 text-xs font-medium text-bruma-light/80"
               >
                 {word}
               </span>
@@ -37,13 +37,13 @@ export default function VocabularioPage() {
               <p className="text-xs font-medium tracking-wide text-brasa">
                 {f.label}
               </p>
-              <p className="text-base font-medium text-petroleo">
+              <p className="text-base font-medium text-bruma-light">
                 {f.text}
               </p>
             </div>
           ))}
         </div>
-        <p className="pt-2 text-xs font-light text-petroleo/60">
+        <p className="pt-2 text-xs font-light text-bruma-light/45">
           {vocabulario.nota}
         </p>
       </SectionCard>

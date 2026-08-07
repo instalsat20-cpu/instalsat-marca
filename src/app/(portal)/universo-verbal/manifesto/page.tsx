@@ -5,7 +5,7 @@ export default function ManifestoPage() {
   return (
     <div>
       <PageTitle title={manifesto.title} />
-      <div className="rounded-2xl bg-petroleo p-8 sm:p-12">
+      <div className="rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-8 sm:p-12">
         <div className="space-y-4">
           {manifesto.paragraphs.map((p, i) => (
             <p

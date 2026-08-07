@@ -26,17 +26,17 @@ export default function TipografiaPage() {
       <SectionCard>
         <div className="space-y-4">
           {tipografia.pesos.map((peso) => (
-            <div key={peso.name} className="border-b border-bruma pb-4 last:border-0 last:pb-0">
-              <p className={`text-2xl text-petroleo ${WEIGHT_CLASS[peso.name]}`}>
+            <div key={peso.name} className="border-b border-bruma-light/10 pb-4 last:border-0 last:pb-0">
+              <p className={`text-2xl text-bruma-light ${WEIGHT_CLASS[peso.name]}`}>
                 Aa {peso.name}
               </p>
-              <p className="mt-1 text-sm font-light text-petroleo/60">
+              <p className="mt-1 text-sm font-light text-bruma-light/50">
                 {peso.uso}
               </p>
             </div>
           ))}
         </div>
-        <p className="pt-2 text-xs font-light text-petroleo/60">
+        <p className="pt-2 text-xs font-light text-bruma-light/45">
           {tipografia.foraDoSistema}
         </p>
       </SectionCard>

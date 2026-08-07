@@ -12,15 +12,18 @@ export default function IntroducaoPage() {
           <Link
             key={card.title}
             href={card.href}
-            className="group rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md"
+            className="group rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-6 transition hover:border-brasa/40 hover:bg-bruma-light/[0.06]"
           >
-            <h2 className="text-base font-medium text-petroleo">
+            <div className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-bruma-light/10 text-base font-medium text-bruma-light">
+              {card.title.charAt(0)}
+            </div>
+            <h2 className="text-lg font-medium text-bruma-light">
               {card.title}
             </h2>
-            <p className="mt-2 text-sm font-light leading-relaxed text-petroleo/70">
+            <p className="mt-2 text-sm font-light leading-relaxed text-bruma-light/55">
               {card.description}
             </p>
-            <span className="mt-4 inline-block text-sm font-medium text-brasa transition group-hover:translate-x-0.5">
+            <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-brasa transition group-hover:translate-x-0.5">
               Ver seção →
             </span>
           </Link>

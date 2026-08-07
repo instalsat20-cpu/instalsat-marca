@@ -13,13 +13,13 @@ export default function DownloadsPage() {
         {downloads.categorias.map((cat) => (
           <div
             key={cat.name}
-            className="flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm"
+            className="flex items-center justify-between rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-6"
           >
             <div>
-              <h2 className="text-base font-medium text-petroleo">
+              <h2 className="text-base font-medium text-bruma-light">
                 {cat.name}
               </h2>
-              <p className="mt-1 text-sm font-light text-petroleo/60">
+              <p className="mt-1 text-sm font-light text-bruma-light/50">
                 {cat.formatos}
               </p>
             </div>
@@ -29,12 +29,12 @@ export default function DownloadsPage() {
                 href={cat.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg bg-petroleo px-4 py-2 text-sm font-medium text-bruma-light transition hover:opacity-90"
+                className="rounded-xl bg-brasa px-4 py-2.5 text-sm font-medium text-bruma-light transition hover:opacity-90"
               >
                 Baixar
               </a>
             ) : (
-              <span className="rounded-lg bg-bruma px-4 py-2 text-sm font-medium text-petroleo/40">
+              <span className="rounded-xl border border-bruma-light/10 px-4 py-2.5 text-sm font-medium text-bruma-light/35">
                 Em breve
               </span>
             )}
