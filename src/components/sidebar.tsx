@@ -31,7 +31,7 @@ export function Sidebar({ role }: { role: Role }) {
               alt="Instalsat"
               width={181}
               height={60}
-              className="h-10 w-auto"
+              className="h-auto w-[150px]"
               priority
             />
             <p className="mt-2 text-xs font-light text-bruma-light/45">

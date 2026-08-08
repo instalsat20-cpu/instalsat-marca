@@ -46,7 +46,7 @@ function LoginForm() {
             alt="Instalsat"
             width={181}
             height={60}
-            className="h-12 w-auto"
+            className="h-auto w-[150px]"
             priority
           />
           <p className="mt-3 text-sm font-light text-bruma-light/50">
