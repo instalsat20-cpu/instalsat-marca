@@ -1,45 +1,74 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { NAV } from "@/lib/content";
+import { NAV_ICONS } from "@/components/nav-icons";
 import type { Role } from "@/generated/prisma/client";
 
 export function Sidebar({ role }: { role: Role }) {
   const pathname = usePathname();
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-bruma-light/10 bg-petroleo px-5 py-8 md:flex">
-      <div className="mb-10 px-2">
-        <Image
-          src="/logo-horizontal.svg"
-          alt="Instalsat"
-          width={181}
-          height={60}
-          className="h-10 w-auto"
-          priority
-        />
-        <p className="mt-2 text-xs font-light text-bruma-light/45">
-          Biblioteca de marca<span className="text-brasa">.</span>
-        </p>
+    <aside
+      className={`sticky top-0 hidden h-screen shrink-0 flex-col border-r border-bruma-light/10 bg-petroleo py-8 transition-[width] duration-200 md:flex ${
+        collapsed ? "w-20 px-3" : "w-64 px-5"
+      }`}
+    >
+      <div
+        className={`mb-10 flex items-center ${collapsed ? "flex-col gap-4 px-0" : "justify-between px-2"}`}
+      >
+        {collapsed ? (
+          <Image src="/simbolo.svg" alt="Instalsat" width={32} height={32} priority />
+        ) : (
+          <div>
+            <Image
+              src="/logo-horizontal.svg"
+              alt="Instalsat"
+              width={181}
+              height={60}
+              className="h-10 w-auto"
+              priority
+            />
+            <p className="mt-2 text-xs font-light text-bruma-light/45">
+              Biblioteca de marca<span className="text-brasa">.</span>
+            </p>
+          </div>
+        )}
+
+        <button
+          onClick={() => setCollapsed((v) => !v)}
+          aria-label={collapsed ? "Expandir menu" : "Recolher menu"}
+          className="flex size-9 shrink-0 items-center justify-center rounded-full border border-bruma-light/10 text-bruma-light/60 transition hover:bg-bruma-light/5 hover:text-bruma-light"
+        >
+          {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+        </button>
       </div>
 
       <nav className="min-h-0 flex-1 space-y-6 overflow-y-auto">
         {NAV.filter((group) => group.roles.includes(role)).map((group) => {
           if (!group.children) {
+            const Icon = NAV_ICONS[group.href!];
             const active = pathname === group.href;
             return (
               <Link
                 key={group.label}
                 href={group.href!}
+                title={collapsed ? group.label : undefined}
                 className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                  collapsed ? "justify-center px-0" : ""
+                } ${
                   active
                     ? "bg-black/15 text-brasa"
                     : "text-bruma-light/65 hover:bg-bruma-light/5 hover:text-bruma-light"
                 }`}
               >
-                {group.label}
+                {Icon && <Icon size={20} strokeWidth={1.75} className="shrink-0" />}
+                {!collapsed && group.label}
               </Link>
             );
           }
@@ -49,35 +78,53 @@ export function Sidebar({ role }: { role: Role }) {
           );
           if (children.length === 0) return null;
 
+          const GroupIcon = NAV_ICONS[group.label];
+          const groupActive = children.some((c) => c.href === pathname);
+
           return (
             <div key={group.label}>
-              <p className="mb-2 px-3 text-xs font-medium tracking-wide text-bruma-light/35">
-                {group.label}
-              </p>
-              <div className="space-y-0.5">
-                {children.map((child) => {
-                  const active = pathname === child.href;
-                  return (
-                    <Link
-                      key={child.href}
-                      href={child.href}
-                      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                        active
-                          ? "bg-black/15 text-brasa"
-                          : "text-bruma-light/65 hover:bg-bruma-light/5 hover:text-bruma-light"
-                      }`}
-                    >
-                      {child.label}
-                    </Link>
-                  );
-                })}
-              </div>
+              <Link
+                href={children[0].href}
+                title={collapsed ? group.label : undefined}
+                className={`flex items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium tracking-wide transition ${
+                  collapsed ? "justify-center px-0" : ""
+                } ${
+                  collapsed && groupActive
+                    ? "text-brasa"
+                    : "text-bruma-light/35 hover:text-bruma-light/60"
+                }`}
+              >
+                {GroupIcon && (
+                  <GroupIcon size={18} strokeWidth={1.75} className="shrink-0" />
+                )}
+                {!collapsed && group.label}
+              </Link>
+              {!collapsed && (
+                <div className="mt-1 space-y-0.5">
+                  {children.map((child) => {
+                    const active = pathname === child.href;
+                    return (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                          active
+                            ? "bg-black/15 text-brasa"
+                            : "text-bruma-light/65 hover:bg-bruma-light/5 hover:text-bruma-light"
+                        }`}
+                      >
+                        {child.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           );
         })}
       </nav>
 
-      {["STUDIO", "CLIENT_ADMIN", "CLIENT_USER"].includes(role) && (
+      {!collapsed && ["STUDIO", "CLIENT_ADMIN", "CLIENT_USER"].includes(role) && (
         <div className="mt-6 shrink-0 rounded-3xl bg-brasa p-6">
           <p className="text-base font-medium leading-snug text-bruma-light">
             Converse com o assistente de marca
