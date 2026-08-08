@@ -7,6 +7,12 @@ export default function GrafismosPage() {
     <div>
       <PageTitle title={grafismos.title} />
 
+      <div className="mb-4 rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-7">
+        <p className="text-sm font-light leading-relaxed text-bruma-light/70">
+          {grafismos.principio}
+        </p>
+      </div>
+
       <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {grafismos.itens.map((item) => (
           <SectionCard key={item.name} title={item.name}>

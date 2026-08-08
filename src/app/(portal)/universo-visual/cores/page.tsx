@@ -15,6 +15,12 @@ export default function CoresPage() {
     <div>
       <PageTitle title={cores.title} />
 
+      <div className="mb-4 rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-7">
+        <p className="text-sm font-light leading-relaxed text-bruma-light/70">
+          {cores.contexto}
+        </p>
+      </div>
+
       <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {cores.paleta.map((c) => (
           <div
@@ -34,6 +40,11 @@ export default function CoresPage() {
               <p className="text-sm font-light leading-relaxed text-bruma-light/60">
                 {c.text}
               </p>
+              {c.justificativa && (
+                <p className="mt-3 border-t border-bruma-light/10 pt-3 text-sm font-light leading-relaxed text-bruma-light/45">
+                  {c.justificativa}
+                </p>
+              )}
             </div>
           </div>
         ))}

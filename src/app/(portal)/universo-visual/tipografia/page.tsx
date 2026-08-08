@@ -20,6 +20,15 @@ export default function TipografiaPage() {
         </SectionCard>
         <SectionCard title={tipografia.rubik.title}>
           <p>{tipografia.rubik.text}</p>
+          <p className="border-t border-bruma-light/10 pt-3 text-bruma-light/50">
+            {tipografia.rubik.justificativa}
+          </p>
+        </SectionCard>
+      </div>
+
+      <div className="mb-4">
+        <SectionCard title={tipografia.porQueNaoNortica.title}>
+          <p>{tipografia.porQueNaoNortica.text}</p>
         </SectionCard>
       </div>
 
@@ -41,13 +50,16 @@ export default function TipografiaPage() {
         </p>
       </SectionCard>
 
-      <div className="mt-4">
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <SectionCard title={tipografia.regras.title}>
           <ul className="list-disc space-y-1.5 pl-4">
             {tipografia.regras.items.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
+        </SectionCard>
+        <SectionCard title={tipografia.expansaoOptica.title}>
+          <p>{tipografia.expansaoOptica.text}</p>
         </SectionCard>
       </div>
     </div>

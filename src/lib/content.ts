@@ -125,6 +125,10 @@ export const posicionamento = {
     "Público-alvo prioritário: síndicos profissionais, administradoras de condomínios e construtoras.",
     "O que nos diferencia não é um serviço ou um preço. É a permanência.",
   ],
+  desafioVisual: {
+    title: "O desafio visual resolvido",
+    text: "O setor de segurança eletrônica comunica de forma previsível: azul corporativo, vermelho de urgência, cadeados, escudos, raios, câmeras estilizadas. A identidade da Instalsat precisava resolver duas tensões: maturidade suficiente para passar credibilidade a uma administradora exigente, e proximidade suficiente para o síndico ligar no sábado. E ainda abandonar os códigos genéricos do setor para ocupar um território visual vazio.",
+  },
 };
 
 export const proposito = {
@@ -153,6 +157,28 @@ export const arquetipos = {
     },
   ],
   closing: "Como os arquétipos se manifestam: o Cuidador fala, o Governante sustenta. A comunicação é próxima e humana (Cuidador), mas o que a empresa entrega é estrutura e previsibilidade (Governante).",
+  balanco: "A Instalsat opera com dois arquétipos em proporções diferentes: 65 a 70% Prestativo (Cuidador) e 30 a 35% Governante. O resultado é uma marca que não é afetuosa demais para sentar à mesa com uma construtora, nem fria demais para o síndico ligar quatro anos depois. Próxima, estruturada e madura.",
+  comoSeManifesta: {
+    title: "Como cada arquétipo se manifesta na prática",
+    prestativo: {
+      label: "Prestativo",
+      items: [
+        "Manutenção recorrente",
+        "Atendimento que não some",
+        "Técnico que tira o sapato antes de entrar",
+        "Ligação antes do cliente ligar",
+      ],
+    },
+    governante: {
+      label: "Governante",
+      items: [
+        "Documentação completa",
+        "Orçamento detalhado",
+        "Operação que não depende de uma única pessoa",
+        "Responsabilidade civil e fiscal como condição de operação (não como diferencial de marketing)",
+      ],
+    },
+  },
 };
 
 export const valoresEBandeiras = {
@@ -277,13 +303,39 @@ export const vocabulario = {
 
 export const simboloELogotipo = {
   title: "Símbolo e Logotipo",
+  conceitoCentral: "Permanência.",
   conceito: {
-    title: "Conceito do símbolo",
-    text: "O arco envolve sem se fechar, a relação também não se fecha. O quadrado ancora no centro, tudo se organiza em torno de quem é atendido. São dois arquétipos em tensão: o Cuidador e o Governante, traduzidos em forma.",
+    title: "O símbolo",
+    text: "Um arco que envolve sem se fechar, porque a relação também não se fecha. Um quadrado no centro, porque tudo se organiza em torno de quem é atendido. São dois arquétipos em tensão: o Cuidador e o Governante, traduzidos em forma antes de qualquer cor ou fonte.",
+  },
+  oArco: {
+    title: "O arco",
+    text: "Formas circulares e côncavas pertencem ao arquétipo do Cuidador: envolvem, acolhem, protegem por fora. O arco abraça o quadrado sem se fechar, é o cuidado que continua.",
+  },
+  oQuadrado: {
+    title: "O quadrado",
+    text: "Formas sólidas, simétricas e estáticas afirmam ordem, estrutura, controle. Está ancorado no centro, fixo, imóvel. Tudo na Instalsat se organiza em torno do cliente, e ele é o quadrado.",
+  },
+  detalhe: {
+    title: "O detalhe que torna o símbolo proprietário",
+    text: "O topo do quadrado se alinha com exatidão à abertura do arco. As terminações do arco são chapadas, com cortes geométricos limpos. É onde Cuidador e Governante param de ser arquétipos separados e viram um único gesto.",
   },
   logotipia: {
     title: "Logotipia",
-    text: "Baseada na Nortica Grotesk Semibold com modificações exclusivas: terminações chapadas nas letras de curvatura, ligatura entre 's' e 't', ajustes de kerning letra a letra. A versão Instalsat não existe em nenhuma fonte de prateleira.",
+    text: "Baseada na Nortica Grotesk Semibold com modificações exclusivas: terminações chapadas nas letras de curvatura (principalmente 's' e 'a'), ligatura entre 's' e 't' que representa conexão (Cuidador), ajustes de kerning letra a letra. A versão Instalsat não existe em nenhuma fonte de prateleira. A Nortica original existe no mercado. A versão Instalsat não.",
+  },
+  versoes: {
+    title: "Versões",
+    items: [
+      {
+        name: "Horizontal",
+        text: "Símbolo à esquerda, logotipia à direita. Configuração padrão para espaços largos.",
+      },
+      {
+        name: "Vertical",
+        text: "Símbolo acima, logotipia abaixo. Configuração de exceção para espaços altos e estreitos.",
+      },
+    ],
   },
   regras: {
     title: "Regras de uso",
@@ -299,12 +351,43 @@ export const simboloELogotipo = {
 
 export const cores = {
   title: "Cores",
+  contexto: "O sistema cromático foi construído para resolver duas tarefas: descolar a marca de um setor dominado por azul corporativo, vermelho de urgência e verde industrial, e traduzir o arquétipo Parceiro Estruturado em cor.",
   paleta: [
-    { name: "Petróleo", hex: "#003841", text: "Cor primária. Fundos, headers, elementos de maior peso visual.", swatch: "petroleo" },
-    { name: "Brasa", hex: "#E05829", text: "Cor de destaque. Pontos de atenção, o ponto final nos títulos, elementos de ação. Nunca usar como fundo de seção.", swatch: "brasa" },
-    { name: "Bruma", hex: "#DCE3EC", text: "Superfícies secundárias, backgrounds de cards, divisórias.", swatch: "bruma" },
-    { name: "Bruma Light", hex: "#EEF5FF", text: "Backgrounds principais em aplicações claras.", swatch: "bruma-light" },
-    { name: "Branco", hex: "#FFFFFF", text: "Fallback técnico apenas. Não faz parte da paleta oficial.", swatch: "branco" },
+    {
+      name: "Petróleo",
+      hex: "#003841",
+      text: "Cor primária. Fundos, headers, elementos de maior peso visual.",
+      justificativa: "Carrega o Governante. Estabilidade, maturidade, presença sólida. É o fundo institucional, a atmosfera onde a Instalsat aparece em contextos controlados.",
+      swatch: "petroleo",
+    },
+    {
+      name: "Brasa",
+      hex: "#E05829",
+      text: "Cor de destaque. Pontos de atenção, o ponto final nos títulos, elementos de ação. Nunca usar como fundo de seção.",
+      justificativa: "Carrega o Prestativo. Calor humano, presença próxima. É a temperatura que impede a marca de soar fria. Aparece pontualmente: no símbolo, em destaques, no ponto final dos títulos. Nunca como fundo dominante.",
+      swatch: "brasa",
+    },
+    {
+      name: "Bruma",
+      hex: "#DCE3EC",
+      text: "Superfícies secundárias, backgrounds de cards, divisórias.",
+      justificativa: "É o ambiente onde Petróleo e Brasa respiram. Substitui o branco puro, cria atmosfera, não esterilidade. Respira a mesma família cromática das outras duas. É o que une o sistema.",
+      swatch: "bruma",
+    },
+    {
+      name: "Bruma Light",
+      hex: "#EEF5FF",
+      text: "Backgrounds principais em aplicações claras.",
+      justificativa: "Versão mais clara da Bruma. Usada em backgrounds principais em aplicações digitais claras.",
+      swatch: "bruma-light",
+    },
+    {
+      name: "Branco",
+      hex: "#FFFFFF",
+      text: "Fallback técnico apenas. Não faz parte da paleta oficial.",
+      justificativa: null as string | null,
+      swatch: "branco",
+    },
   ],
   regras: {
     title: "Regras de cor",
@@ -319,7 +402,15 @@ export const cores = {
 export const tipografia = {
   title: "Tipografia",
   nortica: { title: "Nortica Grotesk", text: "Exclusiva para o logotipo. Não usar em nenhum outro contexto." },
-  rubik: { title: "Rubik (apoio)", text: "Tipografia institucional em todos os pontos de contato." },
+  rubik: {
+    title: "Rubik (apoio)",
+    text: "Tipografia institucional em todos os pontos de contato.",
+    justificativa: "Uma sans-serif de estrutura geométrica e terminações arredondadas. Disciplinada o suficiente para sustentar a maturidade institucional, humana o suficiente para não soar corporativa distante. A estrutura geométrica carrega o Governante. As terminações arredondadas carregam o Prestativo.",
+  },
+  porQueNaoNortica: {
+    title: "Por que não a Nortica no corpo do texto",
+    text: "Por ser diferente do logotipo, que opera com terminações chapadas exclusivas, a Rubik mantém o logo único em sua aplicação. Assinatura de um lado, voz cotidiana do outro.",
+  },
   pesos: [
     { name: "Light", uso: "Textos longos, legendas, textos secundários." },
     { name: "Regular", uso: "Corpo de texto padrão." },
@@ -334,22 +425,27 @@ export const tipografia = {
       "Em fundos escuros (Petróleo), descer um peso para compensar expansão óptica.",
     ],
   },
+  expansaoOptica: {
+    title: "Regra de expansão óptica",
+    text: "Em fundos escuros (Petróleo), textos em Brasa ou Bruma sofrem expansão óptica, a cor clara sobre fundo escuro faz a fonte parecer mais grossa do que é. Por isso, em fundos escuros, cada elemento desce um peso. Pesos Bold e acima ficam fora do sistema.",
+  },
 };
 
 export const grafismos = {
   title: "Grafismos",
+  principio: "O sistema gráfico nasce do próprio símbolo, não é ornamento externo. O arco e o quadrado, ampliados, recortados ou tonalizados, viram ferramentas de design. Toda vez que um elemento aparece, o conceito do símbolo é reafirmado. A identidade não precisa explicar o que é, ela se mostra.",
   itens: [
     {
       name: "Arco-Atmosfera",
-      text: "Arco em variação tonal sobre cor primária. Usado em superfícies grandes como fundo de hero, capas de proposta, slides. Dá atmosfera sem prender o conteúdo.",
+      text: "Em variação tonal sobre Petróleo, o arco vira moldura de fundo em superfícies grandes: hero de site, capa de proposta, slide de apresentação. Dá atmosfera sem prender o conteúdo. A abertura define onde o layout respira.",
     },
     {
       name: "Arco-Máscara",
-      text: "Arco em escala ampliada sobre fotografias. Recorta a imagem, o que fica dentro do arco é o que a marca envolve. Usado em imagens de equipe, instalações, espaços atendidos.",
+      text: "Em escala ampliada sobre fotografias, o arco recorta a imagem. O que fica dentro do arco é o que a marca envolve. Funciona como recurso narrativo em imagens de equipe, pessoas, instalações ou espaços atendidos: a marca literalmente abraça o conteúdo.",
     },
     {
       name: "Quadrado-Frame",
-      text: "O quadrado do símbolo em Brasa como frame para fotografias e crachás. Reforça que quem trabalha sob a marca, trabalha dentro dela.",
+      text: "Em Brasa, o quadrado do símbolo vira frame para fotografias, notadamente em crachás de técnicos. O profissional da Instalsat aparece dentro da estrutura da marca. Quem trabalha sob a marca, trabalha dentro dela.",
     },
   ],
   regra: "Os grafismos derivam do símbolo. Nunca criar elementos gráficos que não tenham origem no arco ou no quadrado.",
@@ -404,13 +500,13 @@ export function buildBrandSystemPrompt(): string {
   return `Você é o Assistente de Marca da Instalsat. Responda sempre em português do Brasil, seguindo rigorosamente o sistema de marca abaixo. Nunca use caixa alta em títulos ou frases inteiras. Nunca use travessão (o caractere —) em nenhuma resposta, use vírgula ou ponto no lugar. Seja direto, técnico sem ser inacessível, próximo sem ser informal, firme sem ser arrogante. Nunca use "prezado", "atenciosamente" ou linguagem de ofício.
 
 POSICIONAMENTO
-${posicionamento.paragraphs.join(" ")}
+${posicionamento.paragraphs.join(" ")} ${posicionamento.desafioVisual.text}
 
 PROPÓSITO
 ${proposito.items.map((i) => `${i.label}: ${i.text}`).join(" ")} Síntese: ${proposito.sintese}
 
 ARQUÉTIPOS
-${arquetipos.intro} Cuidador (dominante): ${arquetipos.cards[0].text} Governante (estruturante): ${arquetipos.cards[1].text} ${arquetipos.closing}
+${arquetipos.intro} Cuidador (dominante): ${arquetipos.cards[0].text} Governante (estruturante): ${arquetipos.cards[1].text} ${arquetipos.closing} ${arquetipos.balanco} Como o Prestativo se manifesta: ${arquetipos.comoSeManifesta.prestativo.items.join(", ")}. Como o Governante se manifesta: ${arquetipos.comoSeManifesta.governante.items.join(", ")}.
 
 VALORES
 Presença (central): ${valoresEBandeiras.central.text} Responsabilidade (sustentação): ${valoresEBandeiras.sustentacao.text} ${valoresEBandeiras.outros.map((v) => `${v.name}: ${v.text}`).join(" ")}
@@ -428,7 +524,10 @@ VOCABULÁRIO
 Palavras que pertencem à marca: ${vocabulario.pertence.items.join(", ")}. Palavras que a marca evita: ${vocabulario.evita.items.join(", ")}. Termos fixos e não variáveis: ${vocabulario.fixos.map((f) => `${f.label}: "${f.text}"`).join(", ")}.
 
 IDENTIDADE VISUAL
-Cores: Petróleo #003841 (primária), Brasa #E05829 (destaque, nunca fundo de seção), Bruma #DCE3EC e Bruma Light #EEF5FF (fundos). Tipografia institucional: Rubik, pesos Light/Regular/Medium/Semibold, nunca Bold, nunca caixa alta. Símbolo: arco (Cuidador) e quadrado (Governante) em tensão.
+Conceito central do símbolo: ${simboloELogotipo.conceitoCentral} ${simboloELogotipo.conceito.text} ${simboloELogotipo.oArco.text} ${simboloELogotipo.oQuadrado.text} ${simboloELogotipo.detalhe.text} ${simboloELogotipo.logotipia.text}
+Cores: ${cores.contexto} Petróleo #003841 (primária): ${cores.paleta[0].justificativa} Brasa #E05829 (destaque, nunca fundo de seção): ${cores.paleta[1].justificativa} Bruma #DCE3EC: ${cores.paleta[2].justificativa} Bruma Light #EEF5FF: ${cores.paleta[3].justificativa}
+Tipografia: Rubik, pesos Light/Regular/Medium/Semibold, nunca Bold, nunca caixa alta. ${tipografia.rubik.justificativa} ${tipografia.porQueNaoNortica.text} ${tipografia.expansaoOptica.text}
+Grafismos: ${grafismos.principio} ${grafismos.itens.map((g) => `${g.name}: ${g.text}`).join(" ")}
 
 Ao responder, aplique este sistema de marca como referência de conteúdo e de tom. Quando pedirem textos de comunicação (headlines, posts, respostas a clientes), escreva já no tom de voz da Instalsat.`;
 }
