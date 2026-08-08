@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV } from "@/lib/content";
@@ -11,10 +12,15 @@ export function Sidebar({ role }: { role: Role }) {
   return (
     <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-bruma-light/10 bg-petroleo px-5 py-8 md:flex">
       <div className="mb-10 px-2">
-        <p className="text-xs font-medium tracking-wide text-bruma-light/45">
-          Instalsat
-        </p>
-        <p className="text-base font-semibold text-bruma-light">
+        <Image
+          src="/logo-horizontal.svg"
+          alt="Instalsat"
+          width={181}
+          height={60}
+          className="h-10 w-auto"
+          priority
+        />
+        <p className="mt-2 text-xs font-light text-bruma-light/45">
           Biblioteca de marca<span className="text-brasa">.</span>
         </p>
       </div>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 179.48 179.44">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #003841;
+      }
+
+      .cls-2 {
+        fill: #e05829;
+      }
+
+      .cls-3 {
+        fill: #dce3ec;
+      }
+    </style>
+  </defs>
+  <g id="BG">
+    <rect class="cls-1" x="0" y="0" width="179.48" height="179.44" rx="32" ry="32"/>
+  </g>
+  <g id="LOGO">
+    <g>
+      <rect class="cls-3" x="76.28" y="76.26" width="26.92" height="26.92"/>
+      <path class="cls-2" d="M116.66,89.72c0,14.87-12.05,26.92-26.92,26.92s-26.92-12.05-26.92-26.92,12.05-26.92,26.92-26.92v-17.95c-24.78,0-44.87,20.08-44.87,44.87s20.09,44.87,44.87,44.87,44.87-20.09,44.87-44.87h-17.95Z"/>
+    </g>
+  </g>
+</svg>

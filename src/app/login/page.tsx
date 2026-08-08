@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
+import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -39,13 +40,18 @@ function LoginForm() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-petroleo px-4">
       <div className="w-full max-w-sm">
-        <div className="mb-8 text-center">
-          <p className="text-sm font-medium tracking-wide text-bruma-light/50">
-            Instalsat
-          </p>
-          <h1 className="mt-1 text-2xl font-semibold text-bruma-light">
+        <div className="mb-10 flex flex-col items-center text-center">
+          <Image
+            src="/logo-horizontal.svg"
+            alt="Instalsat"
+            width={181}
+            height={60}
+            className="h-12 w-auto"
+            priority
+          />
+          <p className="mt-3 text-sm font-light text-bruma-light/50">
             Biblioteca de marca<span className="text-brasa">.</span>
-          </h1>
+          </p>
         </div>
 
         <form
