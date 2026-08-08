@@ -15,11 +15,98 @@ enum Role {
 }
 
 model User {
+  id          String   @id @default(cuid())
+  name        String
+  email       String   @unique
+  password    String
+  role        Role     @default(CLIENT_USER)
+  image       String?
+  active      Boolean  @default(true)
+  permissions Json     @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Color {
+  id        String   @id @default(cuid())
+  name      String
+  hex       String
+  rgb       String
+  cmyk      String
+  pantone   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Typography {
+  id          String   @id @default(cuid())
+  name        String
+  type        String
+  googleFont  String?
+  description String   @db.Text
+  weights     String?
+  downloadUrl String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model LogoFile {
   id           String   @id @default(cuid())
   name         String
-  email        String   @unique
-  passwordHash String
-  role         Role     @default(CLIENT_USER)
+  variation    String
+  colorMode    String
+  format       String
+  colorProfile String
+  previewUrl   String?
+  downloadUrl  String
+  permission   String   @default("logo_basic")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model GraphicElement {
+  id           String   @id @default(cuid())
+  name         String
+  type         String
+  description  String   @db.Text
+  previewUrl   String?
+  format       String
+  colorProfile String
+  downloadUrl  String
+  permission   String   @default("elements_basic")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  name        String
+  category    String
+  description String?
+  previewUrl  String?
+  downloadUrl String
+  permission  String   @default("docs_basic")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Content {
+  id        String   @id @default(cuid())
+  section   String   @unique
+  title     String
+  body      String   @db.Text
+  updatedAt DateTime @updatedAt
+}
+
+model Settings {
+  id           String  @id @default(cuid())
+  brandName    String  @default("Instalsat")
+  primaryColor String  @default("#003841")
+  accentColor  String  @default("#E05829")
+  bgLight      String  @default("#EEF5FF")
+  bgMedium     String  @default("#DCE3EC")
+  logoUrl      String?
+  fontFamily   String  @default("Rubik")
 }

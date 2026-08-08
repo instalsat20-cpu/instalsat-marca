@@ -1,46 +1,55 @@
-import { downloads } from "@/lib/content";
+import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/session";
+import { hasPermission } from "@/lib/permissions";
 import { PageTitle } from "@/components/page-title";
 
-export default function DownloadsPage() {
+export default async function DownloadsPage() {
+  const user = await getSessionUser();
+  const documents = await prisma.document.findMany({ orderBy: { name: "asc" } });
+  const visible = documents.filter((d) => hasPermission(user, d.permission));
+
   return (
     <div>
       <PageTitle
-        title={downloads.title}
+        title="Downloads"
         subtitle="Arquivos oficiais da identidade visual da Instalsat."
       />
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {downloads.categorias.map((cat) => (
-          <div
-            key={cat.name}
-            className="flex items-center justify-between rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-6"
-          >
-            <div>
-              <h2 className="text-base font-medium text-bruma-light">
-                {cat.name}
-              </h2>
-              <p className="mt-1 text-sm font-light text-bruma-light/50">
-                {cat.formatos}
-              </p>
-            </div>
+      {visible.length === 0 ? (
+        <p className="text-sm font-light text-bruma-light/40">Em breve.</p>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {visible.map((doc) => (
+            <div
+              key={doc.id}
+              className="flex items-center justify-between rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-6"
+            >
+              <div>
+                <p className="text-xs font-medium tracking-wide text-brasa">
+                  {doc.category}
+                </p>
+                <h2 className="text-base font-medium text-bruma-light">
+                  {doc.name}
+                </h2>
+                {doc.description && (
+                  <p className="mt-1 text-sm font-light text-bruma-light/50">
+                    {doc.description}
+                  </p>
+                )}
+              </div>
 
-            {cat.href ? (
               <a
-                href={cat.href}
+                href={doc.downloadUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-xl bg-brasa px-4 py-2.5 text-sm font-medium text-bruma-light transition hover:opacity-90"
+                className="shrink-0 rounded-xl bg-brasa px-4 py-2.5 text-sm font-medium text-bruma-light transition hover:opacity-90"
               >
                 Baixar
               </a>
-            ) : (
-              <span className="rounded-xl border border-bruma-light/10 px-4 py-2.5 text-sm font-medium text-bruma-light/35">
-                Em breve
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

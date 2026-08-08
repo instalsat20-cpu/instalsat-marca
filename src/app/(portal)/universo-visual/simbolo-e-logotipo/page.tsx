@@ -1,70 +1,57 @@
-import { simboloELogotipo } from "@/lib/content";
+import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/session";
+import { hasPermission } from "@/lib/permissions";
+import { LockedCard } from "@/components/locked-card";
 import { PageTitle } from "@/components/page-title";
-import { SectionCard } from "@/components/section-card";
+import { DownloadGallery } from "@/components/download-gallery";
 
-export default function SimboloELogotipoPage() {
+const SECTION = "visual_simbolo";
+const TITLE = "Símbolo e Logotipo";
+
+export default async function SimboloELogotipoPage() {
+  const user = await getSessionUser();
+  if (!hasPermission(user, SECTION)) return <LockedCard title={TITLE} />;
+
+  const [content, logos] = await Promise.all([
+    prisma.content.findUnique({ where: { section: SECTION } }),
+    prisma.logoFile.findMany({ orderBy: { name: "asc" } }),
+  ]);
+
+  const visible = logos.filter((logo) => hasPermission(user, logo.permission));
+
+  const items = visible.map((logo) => ({
+    id: logo.id,
+    name: logo.name,
+    group: logo.variation,
+    format: logo.format,
+    colorProfile: logo.colorProfile,
+    subtitle: logo.colorMode,
+    previewUrl: logo.previewUrl,
+    downloadUrl: logo.downloadUrl,
+  }));
+
   return (
     <div>
-      <PageTitle title={simboloELogotipo.title} />
+      <PageTitle title={content?.title ?? TITLE} />
 
-      <div className="mb-4 rounded-3xl bg-brasa p-7">
-        <p className="mb-1 text-xs font-medium tracking-wide text-bruma-light/80">
-          Conceito central
-        </p>
-        <p className="text-2xl font-medium text-bruma-light">
-          {simboloELogotipo.conceitoCentral}
-        </p>
-      </div>
-
-      <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <SectionCard title={simboloELogotipo.conceito.title}>
-          <p>{simboloELogotipo.conceito.text}</p>
-        </SectionCard>
-        <SectionCard title={simboloELogotipo.detalhe.title}>
-          <p>{simboloELogotipo.detalhe.text}</p>
-        </SectionCard>
-      </div>
-
-      <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <SectionCard title={simboloELogotipo.oArco.title}>
-          <p>{simboloELogotipo.oArco.text}</p>
-        </SectionCard>
-        <SectionCard title={simboloELogotipo.oQuadrado.title}>
-          <p>{simboloELogotipo.oQuadrado.text}</p>
-        </SectionCard>
-      </div>
-
-      <div className="mb-4">
-        <SectionCard title={simboloELogotipo.logotipia.title}>
-          <p>{simboloELogotipo.logotipia.text}</p>
-        </SectionCard>
-      </div>
-
-      <div className="mb-4">
-        <SectionCard title={simboloELogotipo.versoes.title}>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {simboloELogotipo.versoes.items.map((v) => (
-              <div key={v.name}>
-                <p className="mb-1 text-sm font-medium text-bruma-light">
-                  {v.name}
-                </p>
-                <p>{v.text}</p>
-              </div>
-            ))}
-          </div>
-        </SectionCard>
-      </div>
-
-      <SectionCard title={simboloELogotipo.regras.title}>
-        <ul className="list-disc space-y-1.5 pl-4">
-          {simboloELogotipo.regras.items.map((item) => (
-            <li key={item}>{item}</li>
+      {content?.body && (
+        <div className="mb-6 rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-7">
+          {content.body.split(/\n\s*\n/).map((p, i) => (
+            <p
+              key={i}
+              className="text-sm font-light leading-relaxed text-bruma-light/70"
+            >
+              {p.trim()}
+            </p>
           ))}
-        </ul>
-        <p className="pt-2 text-xs font-light text-bruma-light/45">
-          {simboloELogotipo.nota}
-        </p>
-      </SectionCard>
+        </div>
+      )}
+
+      {items.length > 0 ? (
+        <DownloadGallery items={items} groupLabel="Variações" />
+      ) : (
+        <p className="text-sm font-light text-bruma-light/40">Em breve.</p>
+      )}
     </div>
   );
 }

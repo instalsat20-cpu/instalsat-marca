@@ -1,22 +1,16 @@
-import { posicionamento } from "@/lib/content";
-import { PageTitle } from "@/components/page-title";
-import { SectionCard } from "@/components/section-card";
+import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/session";
+import { hasPermission } from "@/lib/permissions";
+import { LockedCard } from "@/components/locked-card";
+import { ContentBody } from "@/components/content-body";
 
-export default function PosicionamentoPage() {
-  return (
-    <div>
-      <PageTitle title={posicionamento.title} />
-      <SectionCard>
-        {posicionamento.paragraphs.map((p, i) => (
-          <p key={i}>{p}</p>
-        ))}
-      </SectionCard>
+const SECTION = "nucleo_posicionamento";
+const TITLE = "Posicionamento";
 
-      <div className="mt-4">
-        <SectionCard title={posicionamento.desafioVisual.title}>
-          <p>{posicionamento.desafioVisual.text}</p>
-        </SectionCard>
-      </div>
-    </div>
-  );
+export default async function PosicionamentoPage() {
+  const user = await getSessionUser();
+  if (!hasPermission(user, SECTION)) return <LockedCard title={TITLE} />;
+
+  const content = await prisma.content.findUnique({ where: { section: SECTION } });
+  return <ContentBody title={content?.title ?? TITLE} body={content?.body ?? ""} />;
 }

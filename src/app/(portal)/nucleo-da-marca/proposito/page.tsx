@@ -1,25 +1,16 @@
-import { proposito } from "@/lib/content";
-import { PageTitle } from "@/components/page-title";
-import { SectionCard } from "@/components/section-card";
+import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/session";
+import { hasPermission } from "@/lib/permissions";
+import { LockedCard } from "@/components/locked-card";
+import { ContentBody } from "@/components/content-body";
 
-export default function PropositoPage() {
-  return (
-    <div>
-      <PageTitle title={proposito.title} />
+const SECTION = "nucleo_proposito";
+const TITLE = "Propósito";
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {proposito.items.map((item) => (
-          <SectionCard key={item.label} eyebrow={item.label}>
-            <p>{item.text}</p>
-          </SectionCard>
-        ))}
-      </div>
+export default async function PropositoPage() {
+  const user = await getSessionUser();
+  if (!hasPermission(user, SECTION)) return <LockedCard title={TITLE} />;
 
-      <div className="mt-4 rounded-3xl bg-brasa p-7">
-        <p className="text-lg font-medium text-bruma-light">
-          {proposito.sintese}
-        </p>
-      </div>
-    </div>
-  );
+  const content = await prisma.content.findUnique({ where: { section: SECTION } });
+  return <ContentBody title={content?.title ?? TITLE} body={content?.body ?? ""} />;
 }

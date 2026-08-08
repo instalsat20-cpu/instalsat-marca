@@ -1,0 +1,39 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/session";
+
+async function requireStudio() {
+  const user = await getSessionUser();
+  if (!user || user.role !== "STUDIO") return null;
+  return user;
+}
+
+export async function GET() {
+  const elements = await prisma.graphicElement.findMany({ orderBy: { createdAt: "desc" } });
+  return NextResponse.json({ elements });
+}
+
+export async function POST(req: Request) {
+  const user = await requireStudio();
+  if (!user) return NextResponse.json({ error: "Não autorizado." }, { status: 403 });
+
+  const body = await req.json();
+  const { name, type, description, format, colorProfile, previewUrl, downloadUrl, permission } = body;
+  if (!name || !type || !description || !format || !colorProfile || !downloadUrl) {
+    return NextResponse.json({ error: "Campos obrigatórios ausentes." }, { status: 400 });
+  }
+
+  const element = await prisma.graphicElement.create({
+    data: {
+      name,
+      type,
+      description,
+      format,
+      colorProfile,
+      previewUrl: previewUrl || null,
+      downloadUrl,
+      permission: permission || "elements_basic",
+    },
+  });
+  return NextResponse.json({ element });
+}

@@ -1,15 +1,18 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { authOptions } from "@/lib/auth";
-import { buildBrandSystemPrompt } from "@/lib/content";
+import { getSessionUser } from "@/lib/session";
+import { hasPermission } from "@/lib/permissions";
+import { buildBrandSystemPrompt } from "@/lib/brand-prompt";
 
 type ChatMessage = { role: "user" | "model"; content: string };
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
+  const user = await getSessionUser();
+  if (!user) {
     return NextResponse.json({ error: "Não autenticado." }, { status: 401 });
+  }
+  if (!hasPermission(user, "assistente_ia")) {
+    return NextResponse.json({ error: "Sem permissão para usar o assistente." }, { status: 403 });
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
@@ -36,10 +39,11 @@ export async function POST(req: Request) {
   }));
 
   try {
+    const systemInstruction = await buildBrandSystemPrompt();
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash",
-      systemInstruction: buildBrandSystemPrompt(),
+      systemInstruction,
     });
 
     const chat = model.startChat({ history });

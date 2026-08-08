@@ -1,40 +1,16 @@
-import { valoresEBandeiras } from "@/lib/content";
-import { PageTitle } from "@/components/page-title";
-import { SectionCard } from "@/components/section-card";
+import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/session";
+import { hasPermission } from "@/lib/permissions";
+import { LockedCard } from "@/components/locked-card";
+import { ContentBody } from "@/components/content-body";
 
-export default function ValoresEBandeirasPage() {
-  return (
-    <div>
-      <PageTitle title={valoresEBandeiras.title} />
+const SECTION = "nucleo_valores";
+const TITLE = "Valores e Bandeiras";
 
-      <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded-3xl border border-brasa/30 bg-brasa/10 p-7">
-          <p className="mb-1 text-xs font-medium tracking-wide text-brasa">
-            {valoresEBandeiras.central.label}
-          </p>
-          <h2 className="mb-3 text-lg font-medium text-bruma-light">
-            {valoresEBandeiras.central.name}
-          </h2>
-          <p className="text-sm font-light leading-relaxed text-bruma-light/70">
-            {valoresEBandeiras.central.text}
-          </p>
-        </div>
+export default async function ValoresEBandeirasPage() {
+  const user = await getSessionUser();
+  if (!hasPermission(user, SECTION)) return <LockedCard title={TITLE} />;
 
-        <SectionCard
-          eyebrow={valoresEBandeiras.sustentacao.label}
-          title={valoresEBandeiras.sustentacao.name}
-        >
-          <p>{valoresEBandeiras.sustentacao.text}</p>
-        </SectionCard>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {valoresEBandeiras.outros.map((v) => (
-          <SectionCard key={v.name} title={v.name}>
-            <p>{v.text}</p>
-          </SectionCard>
-        ))}
-      </div>
-    </div>
-  );
+  const content = await prisma.content.findUnique({ where: { section: SECTION } });
+  return <ContentBody title={content?.title ?? TITLE} body={content?.body ?? ""} />;
 }

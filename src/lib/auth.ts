@@ -19,9 +19,9 @@ export const authOptions: AuthOptions = {
         const user = await prisma.user.findUnique({
           where: { email: credentials.email.toLowerCase().trim() },
         });
-        if (!user) return null;
+        if (!user || !user.active) return null;
 
-        const valid = await bcrypt.compare(credentials.password, user.passwordHash);
+        const valid = await bcrypt.compare(credentials.password, user.password);
         if (!valid) return null;
 
         return {
@@ -29,6 +29,10 @@ export const authOptions: AuthOptions = {
           name: user.name,
           email: user.email,
           role: user.role,
+          image: user.image,
+          permissions: Array.isArray(user.permissions)
+            ? (user.permissions as string[])
+            : [],
         };
       },
     }),
@@ -38,6 +42,7 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.role = user.role;
         token.id = user.id;
+        token.permissions = user.permissions as string[];
       }
       return token;
     },
@@ -45,6 +50,7 @@ export const authOptions: AuthOptions = {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.user.permissions = (token.permissions as string[]) ?? [];
       }
       return session;
     },

@@ -1,0 +1,15 @@
+export const EDITABLE_SECTIONS = [
+  { key: "nucleo_posicionamento", label: "Núcleo da Marca — Posicionamento" },
+  { key: "nucleo_proposito", label: "Núcleo da Marca — Propósito" },
+  { key: "nucleo_arquetipos", label: "Núcleo da Marca — Arquétipos" },
+  { key: "nucleo_valores", label: "Núcleo da Marca — Valores e Bandeiras" },
+  { key: "nucleo_publico", label: "Núcleo da Marca — Público" },
+  { key: "verbal_manifesto", label: "Universo Verbal — Manifesto" },
+  { key: "verbal_tomdevoz", label: "Universo Verbal — Tom de Voz" },
+  { key: "verbal_vocabulario", label: "Universo Verbal — Vocabulário" },
+  { key: "visual_simbolo", label: "Universo Visual — Símbolo e Logotipo" },
+  { key: "visual_cores", label: "Universo Visual — Cores" },
+  { key: "visual_tipografia", label: "Universo Visual — Tipografia" },
+  { key: "visual_grafismos", label: "Universo Visual — Grafismos" },
+  { key: "visual_fotografia", label: "Universo Visual — Diretrizes fotográficas" },
+] as const;

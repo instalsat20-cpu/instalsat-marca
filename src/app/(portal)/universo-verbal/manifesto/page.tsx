@@ -1,26 +1,16 @@
-import { manifesto } from "@/lib/content";
-import { PageTitle } from "@/components/page-title";
+import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/session";
+import { hasPermission } from "@/lib/permissions";
+import { LockedCard } from "@/components/locked-card";
+import { ContentBody } from "@/components/content-body";
 
-export default function ManifestoPage() {
-  return (
-    <div>
-      <PageTitle title={manifesto.title} />
-      <div className="rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-8 sm:p-12">
-        <div className="space-y-4">
-          {manifesto.paragraphs.map((p, i) => (
-            <p
-              key={i}
-              className={
-                p === "Instalsat."
-                  ? "text-xl font-medium text-brasa"
-                  : "text-base font-light leading-relaxed text-bruma-light"
-              }
-            >
-              {p}
-            </p>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+const SECTION = "verbal_manifesto";
+const TITLE = "Manifesto";
+
+export default async function ManifestoPage() {
+  const user = await getSessionUser();
+  if (!hasPermission(user, SECTION)) return <LockedCard title={TITLE} />;
+
+  const content = await prisma.content.findUnique({ where: { section: SECTION } });
+  return <ContentBody title={content?.title ?? TITLE} body={content?.body ?? ""} />;
 }

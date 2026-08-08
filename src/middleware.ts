@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
-import { canAccess } from "@/lib/content";
-import type { Role } from "@/generated/prisma/client";
+
+const ADMIN_ROLES = ["STUDIO", "CLIENT_ADMIN"];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -15,7 +15,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  if (!canAccess(pathname, token.role as Role)) {
+  if (pathname.startsWith("/admin") && !ADMIN_ROLES.includes(token.role as string)) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 

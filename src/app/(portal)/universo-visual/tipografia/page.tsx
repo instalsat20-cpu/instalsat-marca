@@ -1,66 +1,97 @@
-import { tipografia } from "@/lib/content";
+import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/session";
+import { hasPermission } from "@/lib/permissions";
+import { LockedCard } from "@/components/locked-card";
 import { PageTitle } from "@/components/page-title";
 import { SectionCard } from "@/components/section-card";
 
-const WEIGHT_CLASS: Record<string, string> = {
-  Light: "font-light",
-  Regular: "font-normal",
-  Medium: "font-medium",
-  Semibold: "font-semibold",
-};
+const SECTION = "visual_tipografia";
+const TITLE = "Tipografia";
 
-export default function TipografiaPage() {
+function googleFontsHref(family: string) {
+  const encoded = family.trim().replace(/\s+/g, "+");
+  return `https://fonts.googleapis.com/css2?family=${encoded}:wght@300;400;500;600&display=swap`;
+}
+
+function googleFontsSpecimenUrl(family: string) {
+  const encoded = family.trim().replace(/\s+/g, "+");
+  return `https://fonts.google.com/specimen/${encoded}`;
+}
+
+export default async function TipografiaPage() {
+  const user = await getSessionUser();
+  if (!hasPermission(user, SECTION)) return <LockedCard title={TITLE} />;
+
+  const [content, fonts] = await Promise.all([
+    prisma.content.findUnique({ where: { section: SECTION } }),
+    prisma.typography.findMany({ orderBy: { order: "asc" } }),
+  ]);
+
   return (
     <div>
-      <PageTitle title={tipografia.title} />
+      <PageTitle title={content?.title ?? TITLE} />
 
-      <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <SectionCard title={tipografia.nortica.title}>
-          <p>{tipografia.nortica.text}</p>
-        </SectionCard>
-        <SectionCard title={tipografia.rubik.title}>
-          <p>{tipografia.rubik.text}</p>
-          <p className="border-t border-bruma-light/10 pt-3 text-bruma-light/50">
-            {tipografia.rubik.justificativa}
-          </p>
-        </SectionCard>
-      </div>
-
-      <div className="mb-4">
-        <SectionCard title={tipografia.porQueNaoNortica.title}>
-          <p>{tipografia.porQueNaoNortica.text}</p>
-        </SectionCard>
-      </div>
-
-      <SectionCard>
-        <div className="space-y-4">
-          {tipografia.pesos.map((peso) => (
-            <div key={peso.name} className="border-b border-bruma-light/10 pb-4 last:border-0 last:pb-0">
-              <p className={`text-2xl text-bruma-light ${WEIGHT_CLASS[peso.name]}`}>
-                Aa {peso.name}
-              </p>
-              <p className="mt-1 text-sm font-light text-bruma-light/50">
-                {peso.uso}
-              </p>
-            </div>
+      {content?.body && (
+        <div className="mb-6 rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-7">
+          {content.body.split(/\n\s*\n/).map((p, i) => (
+            <p
+              key={i}
+              className="text-sm font-light leading-relaxed text-bruma-light/70"
+            >
+              {p.trim()}
+            </p>
           ))}
         </div>
-        <p className="pt-2 text-xs font-light text-bruma-light/45">
-          {tipografia.foraDoSistema}
-        </p>
-      </SectionCard>
+      )}
 
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <SectionCard title={tipografia.regras.title}>
-          <ul className="list-disc space-y-1.5 pl-4">
-            {tipografia.regras.items.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </SectionCard>
-        <SectionCard title={tipografia.expansaoOptica.title}>
-          <p>{tipografia.expansaoOptica.text}</p>
-        </SectionCard>
+      <div className="space-y-4">
+        {fonts.map((font) => (
+          <SectionCard key={font.id} title={font.name}>
+            <p>{font.description}</p>
+            {font.weights && (
+              <p className="text-xs font-medium tracking-wide text-bruma-light/40">
+                Pesos: {font.weights}
+              </p>
+            )}
+
+            {font.googleFont && (
+              <>
+                <link rel="stylesheet" href={googleFontsHref(font.googleFont)} />
+                <div
+                  className="rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-5 py-6 text-3xl text-bruma-light"
+                  style={{ fontFamily: `'${font.googleFont}', sans-serif` }}
+                >
+                  Aa Instalsat
+                </div>
+                <a
+                  href={googleFontsSpecimenUrl(font.googleFont)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-sm font-medium text-brasa"
+                >
+                  Ver no Google Fonts →
+                </a>
+              </>
+            )}
+
+            {font.downloadUrl && (
+              <a
+                href={font.downloadUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-xl bg-brasa px-4 py-2.5 text-sm font-medium text-bruma-light transition hover:opacity-90"
+              >
+                Baixar fonte
+              </a>
+            )}
+          </SectionCard>
+        ))}
+
+        {fonts.length === 0 && (
+          <p className="text-sm font-light text-bruma-light/40">
+            Nenhuma tipografia cadastrada ainda.
+          </p>
+        )}
       </div>
     </div>
   );
