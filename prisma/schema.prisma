@@ -27,16 +27,34 @@ model User {
   updatedAt   DateTime @updatedAt
 }
 
-model Color {
+model Category {
   id        String   @id @default(cuid())
   name      String
-  hex       String
-  rgb       String
-  cmyk      String
-  pantone   String?
+  type      String
   order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  colors    Color[]
+  logos     LogoFile[]
+  elements  GraphicElement[]
+  documents Document[]
+
+  @@unique([type, name])
+}
+
+model Color {
+  id         String    @id @default(cuid())
+  name       String
+  hex        String
+  rgb        String
+  cmyk       String
+  pantone    String?
+  order      Int       @default(0)
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 }
 
 model Typography {
@@ -53,43 +71,46 @@ model Typography {
 }
 
 model LogoFile {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   name         String
-  variation    String
   colorMode    String
   format       String
   colorProfile String
   previewUrl   String?
   downloadUrl  String
-  permission   String   @default("logo_basic")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  permission   String    @default("logo_basic")
+  categoryId   String?
+  category     Category? @relation(fields: [categoryId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 model GraphicElement {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   name         String
-  type         String
-  description  String   @db.Text
+  description  String    @db.Text
   previewUrl   String?
   format       String
   colorProfile String
   downloadUrl  String
-  permission   String   @default("elements_basic")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  permission   String    @default("elements_basic")
+  categoryId   String?
+  category     Category? @relation(fields: [categoryId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 model Document {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
-  category    String
   description String?
   previewUrl  String?
   downloadUrl String
-  permission  String   @default("docs_basic")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  permission  String    @default("docs_basic")
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Content {

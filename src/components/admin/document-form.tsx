@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { UploadField } from "@/components/admin/upload-field";
+import { Dropdown } from "@/components/ui/dropdown";
+import type { CategoryItem } from "@/components/admin/category-manager";
 
 type ExistingDocument = {
   id: string;
   name: string;
-  category: string;
+  categoryId: string | null;
   description: string | null;
   previewUrl: string | null;
   downloadUrl: string;
@@ -15,15 +17,17 @@ type ExistingDocument = {
 
 export function DocumentForm({
   existing,
+  categories,
   onSuccess,
 }: {
   existing?: ExistingDocument;
+  categories: CategoryItem[];
   onSuccess: () => void;
 }) {
   const isEdit = !!existing;
 
   const [name, setName] = useState(existing?.name ?? "");
-  const [category, setCategory] = useState(existing?.category ?? "manual");
+  const [categoryId, setCategoryId] = useState(existing?.categoryId ?? "");
   const [description, setDescription] = useState(existing?.description ?? "");
   const [previewUrl, setPreviewUrl] = useState(existing?.previewUrl ?? "");
   const [downloadUrl, setDownloadUrl] = useState(existing?.downloadUrl ?? "");
@@ -50,7 +54,7 @@ export function DocumentForm({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name,
-            category,
+            categoryId: categoryId || null,
             description,
             previewUrl,
             downloadUrl,
@@ -83,15 +87,12 @@ export function DocumentForm({
         </div>
         <div>
           <label className="mb-1 block text-sm font-medium text-bruma-light/70">Categoria</label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2.5 text-sm text-bruma-light outline-none"
-          >
-            <option value="manual">Manual</option>
-            <option value="certificado">Certificado</option>
-            <option value="outros">Outros</option>
-          </select>
+          <Dropdown
+            value={categoryId}
+            onChange={setCategoryId}
+            placeholder="Sem categoria"
+            options={categories.map((c) => ({ value: c.id, label: c.name }))}
+          />
         </div>
       </div>
 
@@ -101,7 +102,7 @@ export function DocumentForm({
         </label>
         <textarea
           rows={3}
-          value={description}
+          value={description ?? ""}
           onChange={(e) => setDescription(e.target.value)}
           className="w-full rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2.5 text-sm text-bruma-light outline-none"
         />

@@ -9,7 +9,10 @@ async function requireStudio() {
 }
 
 export async function GET() {
-  const elements = await prisma.graphicElement.findMany({ orderBy: { createdAt: "desc" } });
+  const elements = await prisma.graphicElement.findMany({
+    orderBy: { createdAt: "desc" },
+    include: { category: true },
+  });
   return NextResponse.json({ elements });
 }
 
@@ -18,15 +21,15 @@ export async function POST(req: Request) {
   if (!user) return NextResponse.json({ error: "Não autorizado." }, { status: 403 });
 
   const body = await req.json();
-  const { name, type, description, format, colorProfile, previewUrl, downloadUrl, permission } = body;
-  if (!name || !type || !description || !format || !colorProfile || !downloadUrl) {
+  const { name, categoryId, description, format, colorProfile, previewUrl, downloadUrl, permission } = body;
+  if (!name || !description || !format || !colorProfile || !downloadUrl) {
     return NextResponse.json({ error: "Campos obrigatórios ausentes." }, { status: 400 });
   }
 
   const element = await prisma.graphicElement.create({
     data: {
       name,
-      type,
+      categoryId: categoryId || null,
       description,
       format,
       colorProfile,

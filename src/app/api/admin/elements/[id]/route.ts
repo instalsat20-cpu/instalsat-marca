@@ -17,13 +17,13 @@ export async function PUT(
 
   const { id } = await params;
   const body = await req.json();
-  const { name, type, description, format, colorProfile, previewUrl, downloadUrl, permission } = body;
+  const { name, categoryId, description, format, colorProfile, previewUrl, downloadUrl, permission } = body;
 
   const element = await prisma.graphicElement.update({
     where: { id },
     data: {
       name,
-      type,
+      categoryId: categoryId || null,
       description,
       format,
       colorProfile,

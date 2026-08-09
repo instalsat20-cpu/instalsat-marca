@@ -12,6 +12,7 @@ type ColorItem = {
   rgb: string;
   cmyk: string;
   pantone: string | null;
+  category?: { name: string } | null;
 };
 
 function CopyRow({ label, value }: { label: string; value: string }) {
@@ -52,26 +53,45 @@ export function ColorGrid({ colors }: { colors: ColorItem[] }) {
   const shouldReduceMotion = useReducedMotion();
   const duration = shouldReduceMotion ? 0 : 0.2;
 
+  const groups = new Map<string, ColorItem[]>();
+  for (const c of colors) {
+    const key = c.category?.name ?? "Sem categoria";
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(c);
+  }
+  const showHeadings = groups.size > 1;
+
   return (
     <>
-      <StaggerGrid className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-        {colors.map((c) => (
-          <StaggerItem key={c.id}>
-            <button
-              onClick={() => setActive(c)}
-              className="w-full overflow-hidden rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] text-left transition hover:border-bruma-light/25"
-            >
-              <div className="h-24" style={{ backgroundColor: c.hex }} />
-              <div className="p-4">
-                <p className="text-sm font-medium text-bruma-light">{c.name}</p>
-                <p className="text-xs font-light text-bruma-light/40">
-                  {c.hex}
-                </p>
-              </div>
-            </button>
-          </StaggerItem>
+      <div className="space-y-8">
+        {Array.from(groups.entries()).map(([groupName, groupColors]) => (
+          <div key={groupName}>
+            {showHeadings && (
+              <p className="mb-3 text-xs font-medium tracking-wide text-brasa">
+                {groupName}
+              </p>
+            )}
+            <StaggerGrid className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+              {groupColors.map((c) => (
+                <StaggerItem key={c.id}>
+                  <button
+                    onClick={() => setActive(c)}
+                    className="w-full overflow-hidden rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] text-left transition hover:border-bruma-light/25"
+                  >
+                    <div className="h-24" style={{ backgroundColor: c.hex }} />
+                    <div className="p-4">
+                      <p className="text-sm font-medium text-bruma-light">{c.name}</p>
+                      <p className="text-xs font-light text-bruma-light/40">
+                        {c.hex}
+                      </p>
+                    </div>
+                  </button>
+                </StaggerItem>
+              ))}
+            </StaggerGrid>
+          </div>
         ))}
-      </StaggerGrid>
+      </div>
 
       <AnimatePresence>
         {active && (

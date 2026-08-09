@@ -7,11 +7,13 @@ import { Modal } from "@/components/admin/modal";
 import { ElementForm } from "@/components/admin/element-form";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
+import type { CategoryItem } from "@/components/admin/category-manager";
 
 type ElementItem = {
   id: string;
   name: string;
-  type: string;
+  categoryId: string | null;
+  category: { name: string } | null;
   description: string;
   format: string;
   colorProfile: string;
@@ -20,7 +22,13 @@ type ElementItem = {
   permission: string;
 };
 
-export function ElementsManager({ elements }: { elements: ElementItem[] }) {
+export function ElementsManager({
+  elements,
+  categories,
+}: {
+  elements: ElementItem[];
+  categories: CategoryItem[];
+}) {
   const router = useRouter();
   const [editing, setEditing] = useState<ElementItem | "new" | null>(null);
 
@@ -55,7 +63,7 @@ export function ElementsManager({ elements }: { elements: ElementItem[] }) {
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-bruma-light">{el.name}</p>
               <p className="text-xs font-light text-bruma-light/45">
-                {el.type} · {el.format} · {el.colorProfile} · {el.permission}
+                {el.category?.name ?? "Sem categoria"} · {el.format} · {el.colorProfile} · {el.permission}
               </p>
             </div>
             <button
@@ -81,6 +89,7 @@ export function ElementsManager({ elements }: { elements: ElementItem[] }) {
         {editing && (
           <ElementForm
             existing={editing === "new" ? undefined : editing}
+            categories={categories}
             onSuccess={handleSuccess}
           />
         )}

@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Download } from "lucide-react";
 import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
+import { Dropdown } from "@/components/ui/dropdown";
 
 export type GalleryItem = {
   id: string;
@@ -45,32 +46,26 @@ export function DownloadGallery({
       {(groups.length > 1 || formats.length > 1) && (
         <div className="mb-5 flex flex-wrap items-center gap-3">
           {groups.length > 1 && (
-            <select
+            <Dropdown
+              className="w-48"
               value={group}
-              onChange={(e) => setGroup(e.target.value)}
-              className="rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2 text-sm text-bruma-light outline-none"
-            >
-              <option value="all">Todas as {groupLabel.toLowerCase()}</option>
-              {groups.map((g) => (
-                <option key={g} value={g}>
-                  {g}
-                </option>
-              ))}
-            </select>
+              onChange={setGroup}
+              options={[
+                { value: "all", label: `Todas as ${groupLabel.toLowerCase()}` },
+                ...groups.map((g) => ({ value: g, label: g })),
+              ]}
+            />
           )}
           {formats.length > 1 && (
-            <select
+            <Dropdown
+              className="w-48"
               value={format}
-              onChange={(e) => setFormat(e.target.value)}
-              className="rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2 text-sm text-bruma-light outline-none"
-            >
-              <option value="all">Todos os formatos</option>
-              {formats.map((f) => (
-                <option key={f} value={f}>
-                  {f}
-                </option>
-              ))}
-            </select>
+              onChange={setFormat}
+              options={[
+                { value: "all", label: "Todos os formatos" },
+                ...formats.map((f) => ({ value: f, label: f })),
+              ]}
+            />
           )}
         </div>
       )}

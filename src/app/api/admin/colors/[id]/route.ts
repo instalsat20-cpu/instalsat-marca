@@ -17,11 +17,19 @@ export async function PUT(
 
   const { id } = await params;
   const body = await req.json();
-  const { name, hex, rgb, cmyk, pantone, order } = body;
+  const { name, hex, rgb, cmyk, pantone, order, categoryId } = body;
 
   const color = await prisma.color.update({
     where: { id },
-    data: { name, hex, rgb, cmyk, pantone: pantone || null, order },
+    data: {
+      name,
+      hex,
+      rgb,
+      cmyk,
+      pantone: pantone || null,
+      order,
+      categoryId: categoryId || null,
+    },
   });
   return NextResponse.json({ color });
 }

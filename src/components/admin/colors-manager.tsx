@@ -7,6 +7,7 @@ import { Modal } from "@/components/admin/modal";
 import { ColorForm } from "@/components/admin/color-form";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
+import type { CategoryItem } from "@/components/admin/category-manager";
 
 type ColorItem = {
   id: string;
@@ -16,9 +17,17 @@ type ColorItem = {
   cmyk: string;
   pantone: string | null;
   order: number;
+  categoryId: string | null;
+  category: { name: string } | null;
 };
 
-export function ColorsManager({ colors }: { colors: ColorItem[] }) {
+export function ColorsManager({
+  colors,
+  categories,
+}: {
+  colors: ColorItem[];
+  categories: CategoryItem[];
+}) {
   const router = useRouter();
   const [editing, setEditing] = useState<ColorItem | "new" | null>(null);
 
@@ -56,7 +65,10 @@ export function ColorsManager({ colors }: { colors: ColorItem[] }) {
             />
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-bruma-light">{c.name}</p>
-              <p className="text-xs font-light text-bruma-light/45">{c.hex}</p>
+              <p className="text-xs font-light text-bruma-light/45">
+                {c.hex}
+                {c.category ? ` · ${c.category.name}` : ""}
+              </p>
             </div>
             <button
               onClick={() => setEditing(c)}
@@ -81,6 +93,7 @@ export function ColorsManager({ colors }: { colors: ColorItem[] }) {
         {editing && (
           <ColorForm
             existing={editing === "new" ? undefined : editing}
+            categories={categories}
             onSuccess={handleSuccess}
           />
         )}

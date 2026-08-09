@@ -5,6 +5,7 @@
   --color-brasa: #e05829;
   --color-bruma: #dce3ec;
   --color-bruma-light: #eef5ff;
+  --color-surface-elevated: color-mix(in srgb, var(--color-bruma-light) 8%, var(--color-petroleo));
 }
 
 @theme inline {
@@ -14,6 +15,7 @@
   --color-brasa: var(--color-brasa);
   --color-bruma: var(--color-bruma);
   --color-bruma-light: var(--color-bruma-light);
+  --color-surface-elevated: var(--color-surface-elevated);
 }
 
 body {

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Dropdown } from "@/components/ui/dropdown";
+import type { CategoryItem } from "@/components/admin/category-manager";
 
 type ExistingColor = {
   id: string;
@@ -10,13 +12,16 @@ type ExistingColor = {
   cmyk: string;
   pantone: string | null;
   order: number;
+  categoryId: string | null;
 };
 
 export function ColorForm({
   existing,
+  categories,
   onSuccess,
 }: {
   existing?: ExistingColor;
+  categories: CategoryItem[];
   onSuccess: () => void;
 }) {
   const isEdit = !!existing;
@@ -27,6 +32,7 @@ export function ColorForm({
   const [cmyk, setCmyk] = useState(existing?.cmyk ?? "");
   const [pantone, setPantone] = useState(existing?.pantone ?? "");
   const [order, setOrder] = useState(existing?.order ?? 0);
+  const [categoryId, setCategoryId] = useState(existing?.categoryId ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,7 +47,15 @@ export function ColorForm({
         {
           method: isEdit ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, hex, rgb, cmyk, pantone, order: Number(order) }),
+          body: JSON.stringify({
+            name,
+            hex,
+            rgb,
+            cmyk,
+            pantone,
+            order: Number(order),
+            categoryId: categoryId || null,
+          }),
         }
       );
       const data = await res.json();
@@ -117,14 +131,25 @@ export function ColorForm({
         </div>
       </div>
 
-      <div className="w-40">
-        <label className="mb-1 block text-sm font-medium text-bruma-light/70">Ordem</label>
-        <input
-          type="number"
-          value={order}
-          onChange={(e) => setOrder(Number(e.target.value))}
-          className="w-full rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2.5 text-sm text-bruma-light outline-none"
-        />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label className="mb-1 block text-sm font-medium text-bruma-light/70">Categoria</label>
+          <Dropdown
+            value={categoryId}
+            onChange={setCategoryId}
+            placeholder="Sem categoria"
+            options={categories.map((c) => ({ value: c.id, label: c.name }))}
+          />
+        </div>
+        <div>
+          <label className="mb-1 block text-sm font-medium text-bruma-light/70">Ordem</label>
+          <input
+            type="number"
+            value={order}
+            onChange={(e) => setOrder(Number(e.target.value))}
+            className="w-full rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2.5 text-sm text-bruma-light outline-none"
+          />
+        </div>
       </div>
 
       {error && <p className="text-sm font-medium text-brasa">{error}</p>}

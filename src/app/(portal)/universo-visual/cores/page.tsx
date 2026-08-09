@@ -14,7 +14,7 @@ export default async function CoresPage() {
 
   const [content, colors] = await Promise.all([
     prisma.content.findUnique({ where: { section: SECTION } }),
-    prisma.color.findMany({ orderBy: { order: "asc" } }),
+    prisma.color.findMany({ orderBy: { order: "asc" }, include: { category: true } }),
   ]);
 
   return (

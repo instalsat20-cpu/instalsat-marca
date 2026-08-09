@@ -17,13 +17,13 @@ export async function PUT(
 
   const { id } = await params;
   const body = await req.json();
-  const { name, variation, colorMode, format, colorProfile, previewUrl, downloadUrl, permission } = body;
+  const { name, categoryId, colorMode, format, colorProfile, previewUrl, downloadUrl, permission } = body;
 
   const logo = await prisma.logoFile.update({
     where: { id },
     data: {
       name,
-      variation,
+      categoryId: categoryId || null,
       colorMode,
       format,
       colorProfile,

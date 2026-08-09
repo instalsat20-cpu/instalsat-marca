@@ -9,7 +9,10 @@ async function requireStudio() {
 }
 
 export async function GET() {
-  const documents = await prisma.document.findMany({ orderBy: { createdAt: "desc" } });
+  const documents = await prisma.document.findMany({
+    orderBy: { createdAt: "desc" },
+    include: { category: true },
+  });
   return NextResponse.json({ documents });
 }
 
@@ -18,15 +21,15 @@ export async function POST(req: Request) {
   if (!user) return NextResponse.json({ error: "Não autorizado." }, { status: 403 });
 
   const body = await req.json();
-  const { name, category, description, previewUrl, downloadUrl, permission } = body;
-  if (!name || !category || !downloadUrl) {
+  const { name, categoryId, description, previewUrl, downloadUrl, permission } = body;
+  if (!name || !downloadUrl) {
     return NextResponse.json({ error: "Campos obrigatórios ausentes." }, { status: 400 });
   }
 
   const document = await prisma.document.create({
     data: {
       name,
-      category,
+      categoryId: categoryId || null,
       description: description || null,
       previewUrl: previewUrl || null,
       downloadUrl,

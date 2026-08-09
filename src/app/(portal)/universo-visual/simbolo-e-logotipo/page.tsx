@@ -14,7 +14,7 @@ export default async function SimboloELogotipoPage() {
 
   const [content, logos] = await Promise.all([
     prisma.content.findUnique({ where: { section: SECTION } }),
-    prisma.logoFile.findMany({ orderBy: { name: "asc" } }),
+    prisma.logoFile.findMany({ orderBy: { name: "asc" }, include: { category: true } }),
   ]);
 
   const visible = logos.filter((logo) => hasPermission(user, logo.permission));
@@ -22,7 +22,7 @@ export default async function SimboloELogotipoPage() {
   const items = visible.map((logo) => ({
     id: logo.id,
     name: logo.name,
-    group: logo.variation,
+    group: logo.category?.name ?? "Sem categoria",
     format: logo.format,
     colorProfile: logo.colorProfile,
     subtitle: logo.colorMode,
@@ -48,7 +48,7 @@ export default async function SimboloELogotipoPage() {
       )}
 
       {items.length > 0 ? (
-        <DownloadGallery items={items} groupLabel="Variações" />
+        <DownloadGallery items={items} groupLabel="Categorias" />
       ) : (
         <p className="text-sm font-light text-bruma-light/40">Em breve.</p>
       )}

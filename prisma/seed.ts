@@ -46,6 +46,30 @@ async function seedColors() {
   console.log(`Cores seedadas: ${colors.length}`);
 }
 
+async function seedCategories() {
+  const categories: { name: string; type: string; order: number }[] = [
+    { name: "Horizontal", type: "logo", order: 0 },
+    { name: "Vertical", type: "logo", order: 1 },
+    { name: "Símbolo isolado", type: "logo", order: 2 },
+    { name: "Arco-Atmosfera", type: "graphic", order: 0 },
+    { name: "Arco-Máscara", type: "graphic", order: 1 },
+    { name: "Quadrado-Frame", type: "graphic", order: 2 },
+    { name: "Manual", type: "document", order: 0 },
+    { name: "Certificado", type: "document", order: 1 },
+    { name: "Outros", type: "document", order: 2 },
+  ];
+
+  for (const cat of categories) {
+    await prisma.category.upsert({
+      where: { type_name: { type: cat.type, name: cat.name } },
+      update: { order: cat.order },
+      create: cat,
+    });
+  }
+
+  console.log(`Categorias seedadas: ${categories.length}`);
+}
+
 async function seedTypography() {
   const fonts = [
     {
@@ -261,6 +285,7 @@ async function seedContent() {
 
 async function main() {
   await seedUser();
+  await seedCategories();
   await seedColors();
   await seedTypography();
   await seedSettings();

@@ -7,18 +7,26 @@ import { Modal } from "@/components/admin/modal";
 import { DocumentForm } from "@/components/admin/document-form";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
+import type { CategoryItem } from "@/components/admin/category-manager";
 
 type DocumentItem = {
   id: string;
   name: string;
-  category: string;
+  categoryId: string | null;
+  category: { name: string } | null;
   description: string | null;
   previewUrl: string | null;
   downloadUrl: string;
   permission: string;
 };
 
-export function DocumentsManager({ documents }: { documents: DocumentItem[] }) {
+export function DocumentsManager({
+  documents,
+  categories,
+}: {
+  documents: DocumentItem[];
+  categories: CategoryItem[];
+}) {
   const router = useRouter();
   const [editing, setEditing] = useState<DocumentItem | "new" | null>(null);
 
@@ -52,7 +60,9 @@ export function DocumentsManager({ documents }: { documents: DocumentItem[] }) {
           >
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-bruma-light">{doc.name}</p>
-              <p className="text-xs font-light text-bruma-light/45">{doc.category}</p>
+              <p className="text-xs font-light text-bruma-light/45">
+                {doc.category?.name ?? "Sem categoria"}
+              </p>
             </div>
             <button
               onClick={() => setEditing(doc)}
@@ -77,6 +87,7 @@ export function DocumentsManager({ documents }: { documents: DocumentItem[] }) {
         {editing && (
           <DocumentForm
             existing={editing === "new" ? undefined : editing}
+            categories={categories}
             onSuccess={handleSuccess}
           />
         )}

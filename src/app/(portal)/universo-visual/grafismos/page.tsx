@@ -14,7 +14,7 @@ export default async function GrafismosPage() {
 
   const [content, elements] = await Promise.all([
     prisma.content.findUnique({ where: { section: SECTION } }),
-    prisma.graphicElement.findMany({ orderBy: { name: "asc" } }),
+    prisma.graphicElement.findMany({ orderBy: { name: "asc" }, include: { category: true } }),
   ]);
 
   const visible = elements.filter((el) => hasPermission(user, el.permission));
@@ -22,7 +22,7 @@ export default async function GrafismosPage() {
   const items = visible.map((el) => ({
     id: el.id,
     name: el.name,
-    group: el.type,
+    group: el.category?.name ?? "Sem categoria",
     format: el.format,
     colorProfile: el.colorProfile,
     subtitle: el.description,
@@ -48,7 +48,7 @@ export default async function GrafismosPage() {
       )}
 
       {items.length > 0 ? (
-        <DownloadGallery items={items} groupLabel="Tipos" />
+        <DownloadGallery items={items} groupLabel="Categorias" />
       ) : (
         <p className="text-sm font-light text-bruma-light/40">Em breve.</p>
       )}
