@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Download } from "lucide-react";
+import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
 
 export type GalleryItem = {
   id: string;
@@ -79,9 +80,9 @@ export function DownloadGallery({
           Nenhum item disponível para os filtros selecionados.
         </p>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <StaggerGrid className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((item) => (
-            <div
+            <StaggerItem
               key={item.id}
               className="overflow-hidden rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04]"
             >
@@ -125,9 +126,9 @@ export function DownloadGallery({
                   Baixar
                 </a>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGrid>
       )}
     </div>
   );

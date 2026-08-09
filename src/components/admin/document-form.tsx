@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { UploadField } from "@/components/admin/upload-field";
 
 type ExistingDocument = {
@@ -14,8 +13,13 @@ type ExistingDocument = {
   permission: string;
 };
 
-export function DocumentForm({ existing }: { existing?: ExistingDocument }) {
-  const router = useRouter();
+export function DocumentForm({
+  existing,
+  onSuccess,
+}: {
+  existing?: ExistingDocument;
+  onSuccess: () => void;
+}) {
   const isEdit = !!existing;
 
   const [name, setName] = useState(existing?.name ?? "");
@@ -59,8 +63,7 @@ export function DocumentForm({ existing }: { existing?: ExistingDocument }) {
         setError(data.error ?? "Não foi possível salvar.");
         return;
       }
-      router.push("/admin/documentos");
-      router.refresh();
+      onSuccess();
     } finally {
       setLoading(false);
     }

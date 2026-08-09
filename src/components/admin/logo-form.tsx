@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { UploadField } from "@/components/admin/upload-field";
 
 type ExistingLogo = {
@@ -16,8 +15,13 @@ type ExistingLogo = {
   permission: string;
 };
 
-export function LogoForm({ existing }: { existing?: ExistingLogo }) {
-  const router = useRouter();
+export function LogoForm({
+  existing,
+  onSuccess,
+}: {
+  existing?: ExistingLogo;
+  onSuccess: () => void;
+}) {
   const isEdit = !!existing;
 
   const [name, setName] = useState(existing?.name ?? "");
@@ -65,8 +69,7 @@ export function LogoForm({ existing }: { existing?: ExistingLogo }) {
         setError(data.error ?? "Não foi possível salvar.");
         return;
       }
-      router.push("/admin/visual/logos");
-      router.refresh();
+      onSuccess();
     } finally {
       setLoading(false);
     }

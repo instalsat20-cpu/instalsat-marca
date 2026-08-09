@@ -13,6 +13,7 @@ import {
   Settings,
   ExternalLink,
 } from "lucide-react";
+import { NavHover } from "@/components/motion/nav-hover";
 
 type AdminNavItem = {
   label: string;
@@ -64,46 +65,51 @@ export function AdminSidebar({
           const active = pathname === item.href || pathname.startsWith(item.href + "/");
           const Icon = item.icon;
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                active
-                  ? "bg-black/15 text-brasa"
-                  : "text-bruma-light/65 hover:bg-bruma-light/5 hover:text-bruma-light"
-              }`}
-            >
-              <Icon size={18} strokeWidth={1.75} />
-              {item.label}
-            </Link>
+            <NavHover key={item.href}>
+              <Link
+                href={item.href}
+                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                  active
+                    ? "bg-black/15 text-brasa"
+                    : "text-bruma-light/65 hover:bg-bruma-light/5 hover:text-bruma-light"
+                }`}
+              >
+                <Icon size={18} strokeWidth={1.75} />
+                {item.label}
+              </Link>
+            </NavHover>
           );
         })}
       </nav>
 
       <div className="mt-6 shrink-0 space-y-3 border-t border-bruma-light/10 pt-5">
-        <a
-          href="/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-bruma-light/65 transition hover:bg-bruma-light/5 hover:text-bruma-light"
-        >
-          <ExternalLink size={18} strokeWidth={1.75} />
-          Ver Biblioteca
-        </a>
+        <NavHover>
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-bruma-light/65 transition-colors hover:bg-bruma-light/5 hover:text-bruma-light"
+          >
+            <ExternalLink size={18} strokeWidth={1.75} />
+            Ver Biblioteca
+          </a>
+        </NavHover>
 
-        <Link
-          href="/admin/perfil"
-          className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-            pathname === "/admin/perfil"
-              ? "bg-black/15 text-brasa"
-              : "text-bruma-light/65 hover:bg-bruma-light/5 hover:text-bruma-light"
-          }`}
-        >
-          <div className="flex size-7 items-center justify-center rounded-full bg-brasa text-xs font-medium text-bruma-light">
-            {userName.trim().charAt(0).toUpperCase()}
-          </div>
-          <span className="truncate">{userName}</span>
-        </Link>
+        <NavHover>
+          <Link
+            href="/admin/perfil"
+            className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+              pathname === "/admin/perfil"
+                ? "bg-black/15 text-brasa"
+                : "text-bruma-light/65 hover:bg-bruma-light/5 hover:text-bruma-light"
+            }`}
+          >
+            <div className="flex size-7 items-center justify-center rounded-full bg-brasa text-xs font-medium text-bruma-light">
+              {userName.trim().charAt(0).toUpperCase()}
+            </div>
+            <span className="truncate">{userName}</span>
+          </Link>
+        </NavHover>
       </div>
     </aside>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { PERMISSION_GROUPS } from "@/lib/permissions";
 
 type ExistingUser = {
@@ -16,11 +15,12 @@ type ExistingUser = {
 export function UserForm({
   currentUserRole,
   existing,
+  onDone,
 }: {
   currentUserRole: string;
   existing?: ExistingUser;
+  onDone: () => void;
 }) {
-  const router = useRouter();
   const isEdit = !!existing;
   const restricted = currentUserRole === "CLIENT_ADMIN";
 
@@ -81,8 +81,7 @@ export function UserForm({
       if (data.tempPassword) {
         setTempPassword(data.tempPassword);
       } else {
-        router.push("/admin/usuarios");
-        router.refresh();
+        onDone();
       }
     } catch {
       setError("Não foi possível salvar.");
@@ -130,10 +129,7 @@ export function UserForm({
         </div>
         <button
           type="button"
-          onClick={() => {
-            router.push("/admin/usuarios");
-            router.refresh();
-          }}
+          onClick={onDone}
           className="mt-4 rounded-xl bg-petroleo px-4 py-2.5 text-sm font-medium text-bruma-light"
         >
           Concluir

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { PageTitle } from "@/components/page-title";
-import { ContentSectionEditor } from "@/components/admin/content-section-editor";
+import { ContentManager } from "@/components/admin/content-manager";
 import { EDITABLE_SECTIONS } from "@/lib/content-sections";
 
 export default async function AdminConteudoPage() {
@@ -9,6 +9,16 @@ export default async function AdminConteudoPage() {
   });
   const bySection = new Map(records.map((r) => [r.section, r]));
 
+  const sections = EDITABLE_SECTIONS.map((s) => {
+    const record = bySection.get(s.key);
+    return {
+      key: s.key,
+      groupLabel: s.label,
+      title: record?.title ?? s.label.split(" — ")[1],
+      body: record?.body ?? "",
+    };
+  });
+
   return (
     <div>
       <PageTitle
@@ -16,20 +26,7 @@ export default async function AdminConteudoPage() {
         subtitle="Edite os textos exibidos em cada seção da biblioteca."
       />
 
-      <div className="space-y-3">
-        {EDITABLE_SECTIONS.map((s) => {
-          const record = bySection.get(s.key);
-          return (
-            <ContentSectionEditor
-              key={s.key}
-              section={s.key}
-              groupLabel={s.label}
-              initialTitle={record?.title ?? s.label.split(" — ")[1]}
-              initialBody={record?.body ?? ""}
-            />
-          );
-        })}
-      </div>
+      <ContentManager sections={sections} />
     </div>
   );
 }

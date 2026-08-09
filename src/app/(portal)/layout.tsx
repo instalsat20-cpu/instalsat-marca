@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
 import { Sidebar } from "@/components/sidebar";
 import { Topbar } from "@/components/topbar";
+import { PageTransition } from "@/components/page-transition";
 
 export default async function PortalLayout({
   children,
@@ -23,7 +24,9 @@ export default async function PortalLayout({
           role={user.role}
         />
         <main className="flex-1 px-6 py-8 md:px-10 md:py-10">
-          <div className="mx-auto max-w-4xl">{children}</div>
+          <div className="mx-auto max-w-4xl">
+            <PageTransition>{children}</PageTransition>
+          </div>
         </main>
       </div>
     </div>

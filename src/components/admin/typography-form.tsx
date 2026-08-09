@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { UploadField } from "@/components/admin/upload-field";
 
 type ExistingFont = {
@@ -15,8 +14,13 @@ type ExistingFont = {
   order: number;
 };
 
-export function TypographyForm({ existing }: { existing?: ExistingFont }) {
-  const router = useRouter();
+export function TypographyForm({
+  existing,
+  onSuccess,
+}: {
+  existing?: ExistingFont;
+  onSuccess: () => void;
+}) {
   const isEdit = !!existing;
 
   const [name, setName] = useState(existing?.name ?? "");
@@ -56,8 +60,7 @@ export function TypographyForm({ existing }: { existing?: ExistingFont }) {
         setError(data.error ?? "Não foi possível salvar.");
         return;
       }
-      router.push("/admin/visual/tipografia");
-      router.refresh();
+      onSuccess();
     } finally {
       setLoading(false);
     }

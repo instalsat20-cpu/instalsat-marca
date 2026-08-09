@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { UploadField } from "@/components/admin/upload-field";
 
 type ExistingElement = {
@@ -16,8 +15,13 @@ type ExistingElement = {
   permission: string;
 };
 
-export function ElementForm({ existing }: { existing?: ExistingElement }) {
-  const router = useRouter();
+export function ElementForm({
+  existing,
+  onSuccess,
+}: {
+  existing?: ExistingElement;
+  onSuccess: () => void;
+}) {
   const isEdit = !!existing;
 
   const [name, setName] = useState(existing?.name ?? "");
@@ -65,8 +69,7 @@ export function ElementForm({ existing }: { existing?: ExistingElement }) {
         setError(data.error ?? "Não foi possível salvar.");
         return;
       }
-      router.push("/admin/visual/grafismos");
-      router.refresh();
+      onSuccess();
     } finally {
       setLoading(false);
     }

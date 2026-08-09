@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 type ExistingColor = {
   id: string;
@@ -13,8 +12,13 @@ type ExistingColor = {
   order: number;
 };
 
-export function ColorForm({ existing }: { existing?: ExistingColor }) {
-  const router = useRouter();
+export function ColorForm({
+  existing,
+  onSuccess,
+}: {
+  existing?: ExistingColor;
+  onSuccess: () => void;
+}) {
   const isEdit = !!existing;
 
   const [name, setName] = useState(existing?.name ?? "");
@@ -45,8 +49,7 @@ export function ColorForm({ existing }: { existing?: ExistingColor }) {
         setError(data.error ?? "Não foi possível salvar.");
         return;
       }
-      router.push("/admin/visual/cores");
-      router.refresh();
+      onSuccess();
     } finally {
       setLoading(false);
     }

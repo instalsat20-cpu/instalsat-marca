@@ -8,6 +8,7 @@ import { PanelLeftClose, PanelLeftOpen, LayoutGrid } from "lucide-react";
 import { NAV } from "@/lib/content";
 import { NAV_ICONS } from "@/components/nav-icons";
 import { hasPermission, canAccessAdmin } from "@/lib/permissions";
+import { NavHover } from "@/components/motion/nav-hover";
 
 export function Sidebar({
   role,
@@ -58,16 +59,18 @@ export function Sidebar({
 
       <nav className="min-h-0 flex-1 space-y-6 overflow-y-auto">
         {canAccessAdmin(role) && (
-          <Link
-            href="/admin"
-            title={collapsed ? "Painel" : undefined}
-            className={`flex items-center gap-3 rounded-xl border border-bruma-light/10 px-3 py-2.5 text-sm font-medium text-bruma-light transition hover:bg-bruma-light/5 ${
-              collapsed ? "justify-center px-0" : ""
-            }`}
-          >
-            <LayoutGrid size={20} strokeWidth={1.75} className="shrink-0" />
-            {!collapsed && "Painel"}
-          </Link>
+          <NavHover>
+            <Link
+              href="/admin"
+              title={collapsed ? "Painel" : undefined}
+              className={`flex items-center gap-3 rounded-xl border border-bruma-light/10 px-3 py-2.5 text-sm font-medium text-bruma-light transition-colors hover:bg-bruma-light/5 ${
+                collapsed ? "justify-center px-0" : ""
+              }`}
+            >
+              <LayoutGrid size={20} strokeWidth={1.75} className="shrink-0" />
+              {!collapsed && "Painel"}
+            </Link>
+          </NavHover>
         )}
 
         {NAV.map((group) => {
@@ -75,21 +78,22 @@ export function Sidebar({
             const Icon = NAV_ICONS[group.href!];
             const active = pathname === group.href;
             return (
-              <Link
-                key={group.label}
-                href={group.href!}
-                title={collapsed ? group.label : undefined}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                  collapsed ? "justify-center px-0" : ""
-                } ${
-                  active
-                    ? "bg-black/15 text-brasa"
-                    : "text-bruma-light/65 hover:bg-bruma-light/5 hover:text-bruma-light"
-                }`}
-              >
-                {Icon && <Icon size={20} strokeWidth={1.75} className="shrink-0" />}
-                {!collapsed && group.label}
-              </Link>
+              <NavHover key={group.label}>
+                <Link
+                  href={group.href!}
+                  title={collapsed ? group.label : undefined}
+                  className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                    collapsed ? "justify-center px-0" : ""
+                  } ${
+                    active
+                      ? "bg-black/15 text-brasa"
+                      : "text-bruma-light/65 hover:bg-bruma-light/5 hover:text-bruma-light"
+                  }`}
+                >
+                  {Icon && <Icon size={20} strokeWidth={1.75} className="shrink-0" />}
+                  {!collapsed && group.label}
+                </Link>
+              </NavHover>
             );
           }
 
@@ -98,41 +102,44 @@ export function Sidebar({
 
           return (
             <div key={group.label}>
-              <Link
-                href={group.children[0].href}
-                title={collapsed ? group.label : undefined}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium tracking-wide transition ${
-                  collapsed ? "justify-center px-0" : ""
-                } ${
-                  collapsed && groupActive
-                    ? "text-brasa"
-                    : "text-bruma-light/35 hover:text-bruma-light/60"
-                }`}
-              >
-                {GroupIcon && (
-                  <GroupIcon size={18} strokeWidth={1.75} className="shrink-0" />
-                )}
-                {!collapsed && group.label}
-              </Link>
+              <NavHover>
+                <Link
+                  href={group.children[0].href}
+                  title={collapsed ? group.label : undefined}
+                  className={`flex items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium tracking-wide transition-colors ${
+                    collapsed ? "justify-center px-0" : ""
+                  } ${
+                    collapsed && groupActive
+                      ? "text-brasa"
+                      : "text-bruma-light/35 hover:text-bruma-light/60"
+                  }`}
+                >
+                  {GroupIcon && (
+                    <GroupIcon size={18} strokeWidth={1.75} className="shrink-0" />
+                  )}
+                  {!collapsed && group.label}
+                </Link>
+              </NavHover>
               {!collapsed && (
                 <div className="mt-1 space-y-0.5">
                   {group.children.map((child) => {
                     const active = pathname === child.href;
                     const locked = child.permission && !hasPermission(user, child.permission);
                     return (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                          active
-                            ? "bg-black/15 text-brasa"
-                            : locked
-                              ? "text-bruma-light/30"
-                              : "text-bruma-light/65 hover:bg-bruma-light/5 hover:text-bruma-light"
-                        }`}
-                      >
-                        {child.label}
-                      </Link>
+                      <NavHover key={child.href}>
+                        <Link
+                          href={child.href}
+                          className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                            active
+                              ? "bg-black/15 text-brasa"
+                              : locked
+                                ? "text-bruma-light/30"
+                                : "text-bruma-light/65 hover:bg-bruma-light/5 hover:text-bruma-light"
+                          }`}
+                        >
+                          {child.label}
+                        </Link>
+                      </NavHover>
                     );
                   })}
                 </div>
