@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getSessionUser } from "@/lib/session";
 import { hasPermission } from "@/lib/permissions";
-import { buildBrandSystemPrompt } from "@/lib/brand-prompt";
+import { getBrandAssistantContext } from "@/lib/brand-prompt";
 
 type ChatMessage = { role: "user" | "model"; content: string };
 
@@ -15,7 +15,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Sem permissão para usar o assistente." }, { status: 403 });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const { hasContent, apiKey, systemInstruction } = await getBrandAssistantContext();
+  if (!hasContent) {
+    return NextResponse.json({
+      reply: "O conteúdo da marca ainda não foi configurado. Acesse o painel administrativo e preencha as seções em Conteúdo.",
+    });
+  }
+
   if (!apiKey) {
     return NextResponse.json(
       { error: "Assistente não configurado. Configure a variável GEMINI_API_KEY no servidor." },
@@ -39,7 +45,6 @@ export async function POST(req: Request) {
   }));
 
   try {
-    const systemInstruction = await buildBrandSystemPrompt();
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
       model: "gemini-flash-latest",

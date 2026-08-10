@@ -1,34 +1,34 @@
 import { prisma } from "@/lib/prisma";
-import { EDITABLE_SECTIONS } from "@/lib/content-sections";
 
-export async function buildBrandSystemPrompt(): Promise<string> {
-  const [contents, colors] = await Promise.all([
-    prisma.content.findMany({
-      where: { section: { in: EDITABLE_SECTIONS.map((s) => s.key) } },
-    }),
+export async function getBrandAssistantContext() {
+  const [contents, colors, typography, settings] = await Promise.all([
+    prisma.content.findMany({ orderBy: { section: "asc" } }),
     prisma.color.findMany({ orderBy: { order: "asc" } }),
+    prisma.typography.findMany({ orderBy: { order: "asc" } }),
+    prisma.settings.findFirst({
+      select: { brandName: true, geminiApiKey: true },
+    }),
   ]);
 
-  const bySection = new Map(contents.map((c) => [c.section, c]));
-
-  const sectionsText = EDITABLE_SECTIONS.map((s) => {
-    const record = bySection.get(s.key);
-    if (!record || !record.body.trim()) return null;
-    return `${record.title.toUpperCase()}\n${record.body}`;
-  })
-    .filter(Boolean)
-    .join("\n\n");
-
-  const colorsText = colors
-    .map((c) => `${c.name} (${c.hex}): ${c.pantone ? `Pantone ${c.pantone}, ` : ""}RGB ${c.rgb}, CMYK ${c.cmyk}`)
-    .join(" | ");
-
-  return `Você é o Assistente de Marca da Instalsat. Responda sempre em português do Brasil, seguindo rigorosamente o sistema de marca abaixo. Nunca use caixa alta em títulos ou frases inteiras. Nunca use travessão (o caractere —) em nenhuma resposta, use vírgula ou ponto no lugar. Seja direto, técnico sem ser inacessível, próximo sem ser informal, firme sem ser arrogante. Nunca use "prezado", "atenciosamente" ou linguagem de ofício.
-
-${sectionsText}
-
-PALETA DE CORES OFICIAL
-${colorsText}
-
-Ao responder, aplique este sistema de marca como referência de conteúdo e de tom. Quando pedirem textos de comunicação (headlines, posts, respostas a clientes), escreva já no tom de voz da Instalsat.`;
+  return {
+    hasContent: contents.length > 0,
+    apiKey: settings?.geminiApiKey?.trim() || process.env.GEMINI_API_KEY,
+    systemInstruction: JSON.stringify({
+      brandName: settings?.brandName ?? null,
+      content: contents.map(({ section, title, body }) => ({ section, title, body })),
+      colors: colors.map(({ name, hex, rgb, cmyk, pantone }) => ({
+        name,
+        hex,
+        rgb,
+        cmyk,
+        pantone,
+      })),
+      typography: typography.map(({ name, description, weights, type }) => ({
+        name,
+        description,
+        weights,
+        type,
+      })),
+    }),
+  };
 }

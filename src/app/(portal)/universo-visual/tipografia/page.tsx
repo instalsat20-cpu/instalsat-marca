@@ -21,7 +21,10 @@ export default async function TipografiaPage() {
 
   const [content, fonts, manifesto] = await Promise.all([
     prisma.content.findUnique({ where: { section: SECTION } }),
-    prisma.typography.findMany({ orderBy: { order: "asc" } }),
+    prisma.typography.findMany({
+      orderBy: { order: "asc" },
+      include: { applications: { orderBy: { order: "asc" } } },
+    }),
     prisma.content.findUnique({ where: { section: "verbal_manifesto" } }),
   ]);
 
@@ -70,6 +73,7 @@ export default async function TipografiaPage() {
                 family={font.googleFont!}
                 weightNames={parseWeightNames(font.weights)}
                 manifestoExcerpt={manifestoExcerpt}
+                applications={font.applications}
               />
             </SectionCard>
           </div>

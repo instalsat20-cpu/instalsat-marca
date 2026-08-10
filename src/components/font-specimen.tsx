@@ -21,14 +21,26 @@ type WeightRow = {
   demoClassName: string;
 };
 
+type FontApplication = {
+  id: string;
+  category: string;
+  weight: string;
+  sizePx: number | null;
+  lineHeight: string | null;
+  exampleText: string;
+  order: number;
+};
+
 export function FontSpecimen({
   family,
   weightNames,
   manifestoExcerpt,
+  applications,
 }: {
   family: string;
   weightNames: string[];
   manifestoExcerpt: string;
+  applications: FontApplication[];
 }) {
   const [liveText, setLiveText] = useState("");
 
@@ -78,7 +90,7 @@ export function FontSpecimen({
 
   return (
     <div>
-      <link rel="stylesheet" href={googleFontsHref(family, weightNames)} />
+      <link rel="stylesheet" href={googleFontsHref(family, [...weightNames, ...applications.map((application) => application.weight)])} />
 
       <div className="space-y-5">
         {rows.map((row) => (
@@ -120,6 +132,39 @@ export function FontSpecimen({
           style={{ fontFamily: `'${family}', sans-serif`, fontWeight: 400 }}
         />
       </div>
+
+      {applications.length > 0 && (
+        <div className="mt-10 border-t border-bruma-light/10 pt-7">
+          <h3 className="text-sm font-semibold text-bruma-light">Aplicações da fonte</h3>
+          <div className="mt-4">
+            {applications.map((application) => {
+              const size = application.sizePx ?? 16;
+              const mobileSize = Math.max(11, Math.round(size * 0.65));
+              return (
+                <div key={application.id} className="border-b border-bruma-light/10 py-6 first:pt-2 last:border-b-0 last:pb-0">
+                  <p className="text-xs font-light text-bruma-light/60" style={{ fontFamily: "'Rubik', sans-serif", fontWeight: 300 }}>
+                    {application.category}
+                  </p>
+                  <p className="mt-1 text-[10px] font-light text-bruma-light/35" style={{ fontFamily: "'Rubik', sans-serif", fontWeight: 300 }}>
+                    {family} {application.weight} · {size}px · line-height {application.lineHeight || "normal"}
+                  </p>
+                  <p
+                    className="mt-4 text-bruma-light"
+                    style={{
+                      fontFamily: `'${family}', sans-serif`,
+                      fontWeight: weightValue(application.weight),
+                      fontSize: `clamp(${mobileSize}px, ${(size / 8).toFixed(2)}vw, ${size}px)`,
+                      lineHeight: application.lineHeight || "normal",
+                    }}
+                  >
+                    {application.exampleText}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
