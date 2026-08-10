@@ -8,6 +8,10 @@ import OrderedList from "@tiptap/extension-ordered-list";
 import Bold from "@tiptap/extension-bold";
 import Italic from "@tiptap/extension-italic";
 import Placeholder from "@tiptap/extension-placeholder";
+import Document from "@tiptap/extension-document";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
+import HardBreak from "@tiptap/extension-hard-break";
 import {
   Bold as BoldIcon,
   Italic as ItalicIcon,
@@ -17,6 +21,46 @@ import {
   Heading2,
   Heading3,
 } from "lucide-react";
+
+const BLOCK_TAG_PATTERN = /<(p|h[1-6]|ul|ol|li|blockquote|pre)(?:\s|>)/i;
+const BREAK_PATTERN = /<br\s*\/?\s*>/gi;
+const HAS_BREAK_PATTERN = /<br\s*\/?\s*>/i;
+const PARAGRAPH_BREAK_PATTERN = /<br\s*\/?\s*>|\r?\n/gi;
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+export function normalizeEditorHtml(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+
+  if (!BLOCK_TAG_PATTERN.test(trimmed)) {
+    const source = /<[^>]+>/.test(trimmed) ? trimmed : escapeHtml(trimmed);
+    return source
+      .replace(BREAK_PATTERN, "\n")
+      .split(/\r?\n/)
+      .map((line) => `<p>${line || "<br>"}</p>`)
+      .join("");
+  }
+
+  return trimmed.replace(
+    /<p([^>]*)>([\s\S]*?)<\/p>/gi,
+    (paragraph, attributes: string, content: string) => {
+      if (!HAS_BREAK_PATTERN.test(content) && !/[\r\n]/.test(content)) return paragraph;
+      if (/^\s*<br\s*\/?\s*>\s*$/i.test(content)) return paragraph;
+      return content
+        .split(PARAGRAPH_BREAK_PATTERN)
+        .map((line) => `<p${attributes}>${line || "<br>"}</p>`)
+        .join("");
+    }
+  );
+}
 
 function ToolbarButton({
   active,
@@ -119,12 +163,20 @@ export function RichTextEditor({
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({
+        document: false,
+        paragraph: false,
+        text: false,
+        hardBreak: false,
         heading: false,
         bulletList: false,
         orderedList: false,
         bold: false,
         italic: false,
       }),
+      Document,
+      Paragraph,
+      Text,
+      HardBreak,
       Heading.configure({ levels: [2, 3] }),
       BulletList,
       OrderedList,
@@ -132,14 +184,14 @@ export function RichTextEditor({
       Italic,
       Placeholder.configure({ placeholder: placeholder ?? "" }),
     ],
-    content: value || "",
+    content: normalizeEditorHtml(value),
     editorProps: {
       attributes: {
         class:
-          "prose-instalsat min-h-[var(--rte-min-h)] px-3.5 py-3 text-sm text-bruma-light outline-none",
+          "tiptap-content prose-instalsat min-h-[var(--rte-min-h)] px-3.5 py-3 text-sm text-bruma-light outline-none",
       },
     },
-    onUpdate: ({ editor }) => onChange(editor.getHTML()),
+    onUpdate: ({ editor }) => onChange(normalizeEditorHtml(editor.getHTML())),
   });
 
   return (
