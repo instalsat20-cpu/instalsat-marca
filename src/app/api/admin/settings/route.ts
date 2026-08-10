@@ -9,7 +9,7 @@ export async function PUT(req: Request) {
   }
 
   const body = await req.json();
-  const { brandName, primaryColor, accentColor, bgLight, bgMedium, logoUrlDark, logoUrlLight, fontFamily } = body;
+  const { brandName, primaryColor, accentColor, bgLight, bgMedium, logoUrlDark, logoUrlLight, fontFamily, version } = body;
 
   const existing = await prisma.settings.findFirst();
   const data = {
@@ -21,6 +21,7 @@ export async function PUT(req: Request) {
     logoUrlDark: logoUrlDark || null,
     logoUrlLight: logoUrlLight || null,
     fontFamily,
+    version: version || "V. 1.0",
   };
 
   const settings = existing

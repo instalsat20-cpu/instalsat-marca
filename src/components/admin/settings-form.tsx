@@ -14,6 +14,7 @@ type ExistingSettings = {
   logoUrlDark: string | null;
   logoUrlLight: string | null;
   fontFamily: string;
+  version: string;
 };
 
 export function SettingsForm({ existing }: { existing: ExistingSettings }) {
@@ -27,6 +28,7 @@ export function SettingsForm({ existing }: { existing: ExistingSettings }) {
   const [logoUrlDark, setLogoUrlDark] = useState(existing.logoUrlDark ?? "");
   const [logoUrlLight, setLogoUrlLight] = useState(existing.logoUrlLight ?? "");
   const [fontFamily, setFontFamily] = useState(existing.fontFamily);
+  const [version, setVersion] = useState(existing.version);
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,6 +52,7 @@ export function SettingsForm({ existing }: { existing: ExistingSettings }) {
           logoUrlDark,
           logoUrlLight,
           fontFamily,
+          version,
         }),
       });
       const data = await res.json();
@@ -119,6 +122,19 @@ export function SettingsForm({ existing }: { existing: ExistingSettings }) {
         {colorField("Cor de destaque", accentColor, setAccentColor)}
         {colorField("Fundo claro", bgLight, setBgLight)}
         {colorField("Fundo médio", bgMedium, setBgMedium)}
+      </div>
+
+      <div className="sm:w-64">
+        <label className="mb-1 block text-sm font-medium text-bruma-light/70">
+          Versão da Biblioteca de Marca
+        </label>
+        <input
+          required
+          value={version}
+          onChange={(e) => setVersion(e.target.value)}
+          placeholder="V. 1.0"
+          className="w-full rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2.5 text-sm text-bruma-light outline-none"
+        />
       </div>
 
       {fontFamily && (

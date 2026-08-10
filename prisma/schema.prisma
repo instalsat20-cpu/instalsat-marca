@@ -142,4 +142,5 @@ model Settings {
   logoUrlDark  String?
   logoUrlLight String?
   fontFamily   String  @default("Rubik")
+  version      String  @default("V. 1.0")
 }

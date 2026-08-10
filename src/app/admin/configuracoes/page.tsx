@@ -22,6 +22,7 @@ export default async function AdminConfiguracoesPage() {
             logoUrlDark: null,
             logoUrlLight: null,
             fontFamily: "Rubik",
+            version: "V. 1.0",
           }
         }
       />

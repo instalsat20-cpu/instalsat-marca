@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { getSessionUser } from "@/lib/session";
+import { prisma } from "@/lib/prisma";
 import { PageTitle } from "@/components/page-title";
 import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
 
 export default async function AdminDashboardPage() {
   const user = await getSessionUser();
+  const settings = await prisma.settings.findFirst();
 
   const cards = [
     { title: "Usuários", href: "/admin/usuarios", roles: ["STUDIO", "CLIENT_ADMIN"] },
@@ -20,7 +22,12 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
-      <PageTitle title="Painel" subtitle="Gerencie usuários e conteúdo da biblioteca de marca." />
+      <div className="mb-10 flex flex-wrap items-start justify-between gap-4">
+        <PageTitle title="Painel" subtitle="Gerencie usuários e conteúdo da biblioteca de marca." />
+        <span className="shrink-0 rounded-full border border-bruma-light/10 bg-bruma-light/5 px-3 py-1 text-xs font-medium text-bruma-light/50">
+          Biblioteca de Marca {settings?.version ?? "V. 1.0"}
+        </span>
+      </div>
 
       <StaggerGrid className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {cards.map((card) => (
