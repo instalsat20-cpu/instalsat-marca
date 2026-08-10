@@ -22,7 +22,7 @@ export default async function AdminLayout({
       <AdminSidebar
         role={user.role}
         userName={user.name ?? user.email ?? "Usuário"}
-        logoUrl={settings?.logoUrl ?? null}
+        logoUrlDark={settings?.logoUrlDark ?? null}
         brandName={settings?.brandName ?? "Instalsat"}
       />
       <main className="flex-1 px-6 py-10 md:px-10">

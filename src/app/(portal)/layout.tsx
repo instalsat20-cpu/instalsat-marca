@@ -23,7 +23,7 @@ export default async function PortalLayout({
       <Sidebar
         role={user.role}
         permissions={user.permissions}
-        logoUrl={settings?.logoUrl ?? null}
+        logoUrlDark={settings?.logoUrlDark ?? null}
         brandName={settings?.brandName ?? "Instalsat"}
       />
       <div className="flex min-h-screen flex-1 flex-col">

@@ -11,7 +11,8 @@ type ExistingSettings = {
   accentColor: string;
   bgLight: string;
   bgMedium: string;
-  logoUrl: string | null;
+  logoUrlDark: string | null;
+  logoUrlLight: string | null;
   fontFamily: string;
 };
 
@@ -23,7 +24,8 @@ export function SettingsForm({ existing }: { existing: ExistingSettings }) {
   const [accentColor, setAccentColor] = useState(existing.accentColor);
   const [bgLight, setBgLight] = useState(existing.bgLight);
   const [bgMedium, setBgMedium] = useState(existing.bgMedium);
-  const [logoUrl, setLogoUrl] = useState(existing.logoUrl ?? "");
+  const [logoUrlDark, setLogoUrlDark] = useState(existing.logoUrlDark ?? "");
+  const [logoUrlLight, setLogoUrlLight] = useState(existing.logoUrlLight ?? "");
   const [fontFamily, setFontFamily] = useState(existing.fontFamily);
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -45,7 +47,8 @@ export function SettingsForm({ existing }: { existing: ExistingSettings }) {
           accentColor,
           bgLight,
           bgMedium,
-          logoUrl,
+          logoUrlDark,
+          logoUrlLight,
           fontFamily,
         }),
       });
@@ -127,7 +130,7 @@ export function SettingsForm({ existing }: { existing: ExistingSettings }) {
             className="text-2xl text-bruma-light"
             style={{ fontFamily: `'${fontFamily}', sans-serif` }}
           >
-            {brandName || "Instalsat"}
+            {brandName || "Nome da marca"}
           </p>
           <p
             className="mt-1 text-sm text-bruma-light/60"
@@ -138,7 +141,22 @@ export function SettingsForm({ existing }: { existing: ExistingSettings }) {
         </div>
       )}
 
-      <LogoField value={logoUrl} onChange={setLogoUrl} />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <LogoField
+          label="Logo (fundo escuro)"
+          helpText="Usado na sidebar da plataforma."
+          value={logoUrlDark}
+          onChange={setLogoUrlDark}
+          previewBg="dark"
+        />
+        <LogoField
+          label="Logo (fundo claro)"
+          helpText="Reservado para áreas com fundo claro."
+          value={logoUrlLight}
+          onChange={setLogoUrlLight}
+          previewBg="light"
+        />
+      </div>
 
       {error && <p className="text-sm font-medium text-brasa">{error}</p>}
 

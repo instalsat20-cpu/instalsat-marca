@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Search, Check, ChevronDown } from "lucide-react";
+import { Search, Check, ChevronDown, TriangleAlert } from "lucide-react";
 
 type GoogleFont = { family: string; category: string };
 
@@ -92,22 +92,29 @@ export function FontPicker({
 
       {open && (
         <div className="absolute z-20 mt-1.5 w-full overflow-hidden rounded-2xl border border-bruma-light/10 bg-surface-elevated shadow-xl">
-          <div className="flex items-center gap-2 border-b border-bruma-light/10 px-3 py-2.5">
-            <Search size={15} className="text-bruma-light/40" />
-            <input
-              autoFocus
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Buscar fonte..."
-              className="w-full bg-transparent text-sm text-bruma-light outline-none placeholder:text-bruma-light/30"
-            />
-          </div>
+          {!error && (
+            <div className="flex items-center gap-2 border-b border-bruma-light/10 px-3 py-2.5">
+              <Search size={15} className="text-bruma-light/40" />
+              <input
+                autoFocus
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Buscar fonte..."
+                className="w-full bg-transparent text-sm text-bruma-light outline-none placeholder:text-bruma-light/30"
+              />
+            </div>
+          )}
 
           <div ref={listRef} className="max-h-72 overflow-y-auto py-1">
             {loading && (
               <p className="px-4 py-3 text-sm font-light text-bruma-light/40">Carregando fontes...</p>
             )}
-            {error && <p className="px-4 py-3 text-sm font-medium text-brasa">{error}</p>}
+            {error && (
+              <div className="flex items-start gap-2.5 px-4 py-3">
+                <TriangleAlert size={16} className="mt-0.5 shrink-0 text-brasa" />
+                <p className="text-sm font-light text-bruma-light/70">{error}</p>
+              </div>
+            )}
             {!loading &&
               !error &&
               results.map((font) => (

@@ -139,6 +139,7 @@ model Settings {
   accentColor  String  @default("#E05829")
   bgLight      String  @default("#EEF5FF")
   bgMedium     String  @default("#DCE3EC")
-  logoUrl      String?
+  logoUrlDark  String?
+  logoUrlLight String?
   fontFamily   String  @default("Rubik")
 }

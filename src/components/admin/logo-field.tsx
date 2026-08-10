@@ -4,11 +4,17 @@ import { useState } from "react";
 import { UploadCloud, X } from "lucide-react";
 
 export function LogoField({
+  label,
+  helpText,
   value,
   onChange,
+  previewBg = "dark",
 }: {
+  label: string;
+  helpText?: string;
   value: string;
   onChange: (url: string) => void;
+  previewBg?: "dark" | "light";
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,15 +47,28 @@ export function LogoField({
   return (
     <div>
       <label className="mb-1 block text-sm font-medium text-bruma-light/70">
-        Logo da plataforma
+        {label}
       </label>
+      {helpText && (
+        <p className="mb-2 text-xs font-light text-bruma-light/45">{helpText}</p>
+      )}
       <div className="flex items-center gap-4">
-        <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-bruma-light/10 bg-bruma-light/5">
+        <div
+          className={`flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-bruma-light/10 ${
+            previewBg === "light" ? "bg-bruma-light" : "bg-petroleo"
+          }`}
+        >
           {value ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={value} alt="Logo atual" className="max-h-full max-w-full object-contain" />
           ) : (
-            <span className="text-[10px] font-light text-bruma-light/30">Sem logo</span>
+            <span
+              className={`text-[10px] font-light ${
+                previewBg === "light" ? "text-petroleo/40" : "text-bruma-light/30"
+              }`}
+            >
+              Sem logo
+            </span>
           )}
         </div>
 

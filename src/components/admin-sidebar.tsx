@@ -24,12 +24,12 @@ type AdminNavItem = {
 export function AdminSidebar({
   role,
   userName,
-  logoUrl,
+  logoUrlDark,
   brandName,
 }: {
   role: string;
   userName: string;
-  logoUrl: string | null;
+  logoUrlDark: string | null;
   brandName: string;
 }) {
   const pathname = usePathname();
@@ -55,9 +55,9 @@ export function AdminSidebar({
     <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-bruma-light/10 bg-petroleo px-5 py-8 md:flex">
       <div className="mb-6 px-2">
         <a href="/" target="_blank" rel="noopener noreferrer">
-          {logoUrl ? (
+          {logoUrlDark ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={logoUrl} alt={brandName} className="h-auto max-h-[60px] w-auto max-w-[150px]" />
+            <img src={logoUrlDark} alt={brandName} className="h-auto max-h-[60px] w-auto max-w-[150px]" />
           ) : (
             <p className="text-xl font-medium text-bruma-light">{brandName}</p>
           )}

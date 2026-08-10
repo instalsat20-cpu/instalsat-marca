@@ -13,12 +13,12 @@ import { NavHover } from "@/components/motion/nav-hover";
 export function Sidebar({
   role,
   permissions,
-  logoUrl,
+  logoUrlDark,
   brandName,
 }: {
   role: string;
   permissions: string[];
-  logoUrl: string | null;
+  logoUrlDark: string | null;
   brandName: string;
 }) {
   const pathname = usePathname();
@@ -38,9 +38,9 @@ export function Sidebar({
           <Image src="/simbolo.svg" alt={brandName} width={32} height={32} priority />
         ) : (
           <div>
-            {logoUrl ? (
+            {logoUrlDark ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={logoUrl} alt={brandName} className="h-auto max-h-[60px] w-auto max-w-[150px]" />
+              <img src={logoUrlDark} alt={brandName} className="h-auto max-h-[60px] w-auto max-w-[150px]" />
             ) : (
               <p className="text-xl font-medium text-bruma-light">{brandName}</p>
             )}

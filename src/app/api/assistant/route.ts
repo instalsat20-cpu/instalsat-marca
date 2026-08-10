@@ -18,8 +18,8 @@ export async function POST(req: Request) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      { error: "GEMINI_API_KEY não configurada no servidor." },
-      { status: 500 }
+      { error: "Assistente não configurado. Configure a variável GEMINI_API_KEY no servidor." },
+      { status: 503 }
     );
   }
 

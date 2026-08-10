@@ -14,8 +14,11 @@ export async function GET() {
   const apiKey = process.env.GOOGLE_FONTS_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      { error: "GOOGLE_FONTS_API_KEY não configurada no servidor." },
-      { status: 500 }
+      {
+        error:
+          "Busca de fontes indisponível: configure a variável GOOGLE_FONTS_API_KEY no servidor para habilitar este recurso.",
+      },
+      { status: 503 }
     );
   }
 
