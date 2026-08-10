@@ -11,7 +11,7 @@ import {
   FileText,
   FileEdit,
   Settings,
-  ExternalLink,
+  ArrowLeft,
   BookOpen,
 } from "lucide-react";
 import { NavHover } from "@/components/motion/nav-hover";
@@ -50,17 +50,31 @@ export function AdminSidebar({
 
   return (
     <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-bruma-light/10 bg-petroleo px-5 py-8 md:flex">
-      <div className="mb-10 px-2">
-        <Image
-          src="/logo-horizontal.svg"
-          alt="Instalsat"
-          width={181}
-          height={60}
-          className="h-auto w-[150px]"
-          priority
-        />
+      <div className="mb-6 px-2">
+        <a href="/" target="_blank" rel="noopener noreferrer">
+          <Image
+            src="/logo-horizontal.svg"
+            alt="Instalsat"
+            width={181}
+            height={60}
+            className="h-auto w-[150px]"
+            priority
+          />
+        </a>
         <p className="mt-2 text-xs font-light text-bruma-light/45">Painel</p>
       </div>
+
+      <NavHover>
+        <a
+          href="/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mb-6 flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-bruma-light/65 transition-colors hover:bg-bruma-light/5 hover:text-bruma-light"
+        >
+          <ArrowLeft size={16} strokeWidth={1.75} />
+          Biblioteca
+        </a>
+      </NavHover>
 
       <nav className="min-h-0 flex-1 space-y-0.5 overflow-y-auto">
         {items.map((item) => {
@@ -85,18 +99,6 @@ export function AdminSidebar({
       </nav>
 
       <div className="mt-6 shrink-0 space-y-3 border-t border-bruma-light/10 pt-5">
-        <NavHover>
-          <a
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-bruma-light/65 transition-colors hover:bg-bruma-light/5 hover:text-bruma-light"
-          >
-            <ExternalLink size={18} strokeWidth={1.75} />
-            Ver Biblioteca
-          </a>
-        </NavHover>
-
         <NavHover>
           <Link
             href="/admin/perfil"

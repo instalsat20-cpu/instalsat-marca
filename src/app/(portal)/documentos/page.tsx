@@ -6,12 +6,17 @@ import { PageTitle } from "@/components/page-title";
 import { RichText } from "@/components/rich-text";
 import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
 
+const SECTION = "documentos";
+
 export default async function DocumentosPage() {
   const user = await getSessionUser();
-  const documents = await prisma.document.findMany({
-    orderBy: { name: "asc" },
-    include: { category: true },
-  });
+  const [content, documents] = await Promise.all([
+    prisma.content.findUnique({ where: { section: SECTION } }),
+    prisma.document.findMany({
+      orderBy: { name: "asc" },
+      include: { category: true },
+    }),
+  ]);
   const visible = documents.filter((d) => hasPermission(user, d.permission));
 
   const groups = new Map<string, typeof visible>();
@@ -24,10 +29,13 @@ export default async function DocumentosPage() {
 
   return (
     <div>
-      <PageTitle
-        title="Documentos"
-        subtitle="Arquivos oficiais da identidade visual da Instalsat."
-      />
+      <PageTitle title={content?.title ?? "Documentos"} />
+
+      {content?.body && (
+        <div className="mb-6 rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-7 text-sm">
+          <RichText html={content.body} />
+        </div>
+      )}
 
       {visible.length === 0 ? (
         <p className="text-sm font-light text-bruma-light/40">Em breve.</p>

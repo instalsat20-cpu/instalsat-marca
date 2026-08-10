@@ -12,14 +12,20 @@ export default async function DiretrizesPage() {
   const user = await getSessionUser();
   if (!hasPermission(user, SECTION)) return <LockedCard title={TITLE} />;
 
-  const guidelines = await prisma.guideLine.findMany({ orderBy: { order: "asc" } });
+  const [content, guidelines] = await Promise.all([
+    prisma.content.findUnique({ where: { section: SECTION } }),
+    prisma.guideLine.findMany({ orderBy: { order: "asc" } }),
+  ]);
 
   return (
     <div>
-      <PageTitle
-        title={TITLE}
-        subtitle="Como aplicar corretamente os elementos da identidade visual."
-      />
+      <PageTitle title={content?.title ?? TITLE} />
+
+      {content?.body && (
+        <div className="mb-6 rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-7 text-sm">
+          <RichText html={content.body} />
+        </div>
+      )}
 
       {guidelines.length === 0 ? (
         <p className="text-sm font-light text-bruma-light/40">

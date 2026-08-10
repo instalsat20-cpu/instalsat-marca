@@ -12,4 +12,6 @@ export const EDITABLE_SECTIONS = [
   { key: "visual_tipografia", label: "Universo Visual — Tipografia" },
   { key: "visual_grafismos", label: "Universo Visual — Grafismos" },
   { key: "visual_fotografia", label: "Universo Visual — Diretrizes fotográficas" },
+  { key: "visual_diretrizes", label: "Universo Visual — Diretrizes de Uso" },
+  { key: "documentos", label: "Documentos" },
 ] as const;

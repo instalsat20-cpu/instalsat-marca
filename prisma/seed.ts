@@ -327,6 +327,20 @@ async function seedContent() {
         "Paleta fotográfica: tons quentes-neutros, luz natural controlada, ambientes com acabamento premium (ACM, porcelana, vegetação tropical, gates eletrônicos).",
       ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
+    {
+      section: "visual_diretrizes",
+      title: "Diretrizes de Uso",
+      body: [
+        "Como aplicar corretamente os elementos da identidade visual.",
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
+    },
+    {
+      section: "documentos",
+      title: "Documentos",
+      body: [
+        "Arquivos oficiais da identidade visual da Instalsat.",
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
+    },
   ];
 
   for (const s of sections) {
