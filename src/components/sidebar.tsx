@@ -15,11 +15,13 @@ export function Sidebar({
   permissions,
   logoUrlDark,
   brandName,
+  version,
 }: {
   role: string;
   permissions: string[];
   logoUrlDark: string | null;
   brandName: string;
+  version: string;
 }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
@@ -44,9 +46,14 @@ export function Sidebar({
             ) : (
               <p className="text-xl font-medium text-bruma-light">{brandName}</p>
             )}
-            <p className="mt-2 text-xs font-light text-bruma-light/45">
-              Biblioteca de marca<span className="text-brasa">.</span>
-            </p>
+            <div className="mt-2 flex items-center gap-2 text-xs font-light text-bruma-light/45">
+              <span>
+                Biblioteca de marca<span className="text-brasa">.</span>
+              </span>
+              <span className="rounded-full border border-bruma-light/10 px-2 py-0.5 text-[10px] font-medium text-bruma-light/55">
+                {version}
+              </span>
+            </div>
           </div>
         )}
 
@@ -151,19 +158,6 @@ export function Sidebar({
         })}
       </nav>
 
-      {!collapsed && hasPermission(user, "assistente_ia") && (
-        <div className="mt-6 shrink-0 rounded-3xl bg-brasa p-6">
-          <p className="text-base font-medium leading-snug text-bruma-light">
-            Converse com o assistente de marca
-          </p>
-          <Link
-            href="/assistente"
-            className="mt-4 inline-block rounded-xl bg-bruma-light px-4 py-2 text-xs font-medium text-petroleo transition hover:opacity-90"
-          >
-            Abrir assistente
-          </Link>
-        </div>
-      )}
     </aside>
   );
 }

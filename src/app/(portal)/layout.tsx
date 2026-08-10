@@ -25,6 +25,7 @@ export default async function PortalLayout({
         permissions={user.permissions}
         logoUrlDark={settings?.logoUrlDark ?? null}
         brandName={settings?.brandName ?? "Instalsat"}
+        version={settings?.version ?? "V. 1.0"}
       />
       <div className="flex min-h-screen flex-1 flex-col">
         <Topbar
