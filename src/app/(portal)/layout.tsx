@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
+import { prisma } from "@/lib/prisma";
 import { Sidebar } from "@/components/sidebar";
 import { Topbar } from "@/components/topbar";
 import { PageTransition } from "@/components/page-transition";
@@ -15,9 +16,16 @@ export default async function PortalLayout({
     redirect("/login");
   }
 
+  const settings = await prisma.settings.findFirst();
+
   return (
     <div className="flex min-h-screen">
-      <Sidebar role={user.role} permissions={user.permissions} />
+      <Sidebar
+        role={user.role}
+        permissions={user.permissions}
+        logoUrl={settings?.logoUrl ?? null}
+        brandName={settings?.brandName ?? "Instalsat"}
+      />
       <div className="flex min-h-screen flex-1 flex-col">
         <Topbar
           userName={user.name ?? user.email ?? "Usuário"}

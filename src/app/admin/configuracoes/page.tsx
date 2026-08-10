@@ -19,7 +19,7 @@ export default async function AdminConfiguracoesPage() {
             accentColor: "#E05829",
             bgLight: "#EEF5FF",
             bgMedium: "#DCE3EC",
-            logoUrl: null,
+            logoUrl: "/logo-horizontal.svg",
             fontFamily: "Rubik",
           }
         }

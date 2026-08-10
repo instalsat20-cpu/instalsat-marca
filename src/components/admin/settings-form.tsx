@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { UploadField } from "@/components/admin/upload-field";
 import { FontPicker } from "@/components/admin/font-picker";
+import { LogoField } from "@/components/admin/logo-field";
 
 type ExistingSettings = {
   brandName: string;
@@ -138,7 +138,7 @@ export function SettingsForm({ existing }: { existing: ExistingSettings }) {
         </div>
       )}
 
-      <UploadField label="Logo (opcional)" value={logoUrl} onChange={setLogoUrl} />
+      <LogoField value={logoUrl} onChange={setLogoUrl} />
 
       {error && <p className="text-sm font-medium text-brasa">{error}</p>}
 

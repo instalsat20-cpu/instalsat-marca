@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -25,9 +24,13 @@ type AdminNavItem = {
 export function AdminSidebar({
   role,
   userName,
+  logoUrl,
+  brandName,
 }: {
   role: string;
   userName: string;
+  logoUrl: string | null;
+  brandName: string;
 }) {
   const pathname = usePathname();
 
@@ -52,14 +55,12 @@ export function AdminSidebar({
     <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-bruma-light/10 bg-petroleo px-5 py-8 md:flex">
       <div className="mb-6 px-2">
         <a href="/" target="_blank" rel="noopener noreferrer">
-          <Image
-            src="/logo-horizontal.svg"
-            alt="Instalsat"
-            width={181}
-            height={60}
-            className="h-auto w-[150px]"
-            priority
-          />
+          {logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logoUrl} alt={brandName} className="h-auto max-h-[60px] w-auto max-w-[150px]" />
+          ) : (
+            <p className="text-xl font-medium text-bruma-light">{brandName}</p>
+          )}
         </a>
         <p className="mt-2 text-xs font-light text-bruma-light/45">Painel</p>
       </div>

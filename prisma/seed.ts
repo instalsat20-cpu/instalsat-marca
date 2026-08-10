@@ -164,21 +164,22 @@ async function seedTypography() {
 
 async function seedSettings() {
   const existing = await prisma.settings.findFirst();
-  const data = {
-    brandName: "Instalsat",
-    primaryColor: "#003841",
-    accentColor: "#E05829",
-    bgLight: "#EEF5FF",
-    bgMedium: "#DCE3EC",
-    logoUrl: null,
-    fontFamily: "Rubik",
-  };
-
   if (existing) {
-    await prisma.settings.update({ where: { id: existing.id }, data });
-  } else {
-    await prisma.settings.create({ data });
+    console.log("Settings já existe, mantendo valores atuais (não sobrescrito pelo seed).");
+    return;
   }
+
+  await prisma.settings.create({
+    data: {
+      brandName: "Instalsat",
+      primaryColor: "#003841",
+      accentColor: "#E05829",
+      bgLight: "#EEF5FF",
+      bgMedium: "#DCE3EC",
+      logoUrl: "/logo-horizontal.svg",
+      fontFamily: "Rubik",
+    },
+  });
 
   console.log("Settings seedado.");
 }
