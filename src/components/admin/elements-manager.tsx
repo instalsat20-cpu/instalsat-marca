@@ -8,6 +8,7 @@ import { ElementForm } from "@/components/admin/element-form";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
 import type { CategoryItem } from "@/components/admin/category-manager";
+import { BatchUpload } from "@/components/admin/batch-upload";
 
 type ElementItem = {
   id: string;
@@ -43,6 +44,7 @@ export function ElementsManager({
 
   return (
     <>
+      <BatchUpload context="grafismos" onSuccess={() => router.refresh()} />
       <div className="mb-8 flex items-center justify-end">
         <button
           onClick={() => setEditing("new")}

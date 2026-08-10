@@ -159,6 +159,21 @@ async function seedTypography() {
     }
   }
 
+  const rubik = await prisma.typography.findFirst({ where: { name: "Rubik" } });
+  if (rubik) {
+    await prisma.typographyApplication.deleteMany({ where: { typographyId: rubik.id } });
+    await prisma.typographyApplication.createMany({
+      data: [
+        { typographyId: rubik.id, category: "Título", weight: "Semibold", sizePx: 40, lineHeight: "1.2", exampleText: "A empresa que fica.", order: 0 },
+        { typographyId: rubik.id, category: "Subtítulo", weight: "Medium", sizePx: 24, lineHeight: "1.3", exampleText: "Para que o essencial nunca pare.", order: 1 },
+        { typographyId: rubik.id, category: "Parágrafo", weight: "Regular", sizePx: 16, lineHeight: "1.6", exampleText: "A Instalsat existe há quase três décadas para cuidar de uma camada da vida que ninguém percebe quando funciona, mas que paralisa o cotidiano quando falha.", order: 2 },
+        { typographyId: rubik.id, category: "Destaque", weight: "Semibold", sizePx: 20, lineHeight: "1.4", exampleText: "Presença contínua. Responsabilidade integral.", order: 3 },
+        { typographyId: rubik.id, category: "Legenda", weight: "Light", sizePx: 13, lineHeight: "1.5", exampleText: "Segurança eletrônica e manutenção elétrica. Desde 1998.", order: 4 },
+        { typographyId: rubik.id, category: "Botão", weight: "Medium", sizePx: 14, lineHeight: "1.0", exampleText: "Solicitar orçamento", order: 5 },
+      ],
+    });
+  }
+
   console.log(`Tipografias seedadas: ${fonts.length}`);
 }
 

@@ -68,12 +68,31 @@ model Typography {
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  applications TypographyApplication[]
+}
+
+model TypographyApplication {
+  id           String     @id @default(cuid())
+  typographyId String
+  typography   Typography @relation(fields: [typographyId], references: [id], onDelete: Cascade)
+  category     String
+  weight       String
+  sizePx       Int?
+  lineHeight   String?
+  exampleText  String     @db.Text
+  order        Int        @default(0)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([typographyId, order])
 }
 
 model LogoFile {
   id           String    @id @default(cuid())
   name         String
   description  String?   @db.Text
+  variation    String    @default("Outro")
   colorMode    String
   format       String
   colorProfile String
@@ -90,6 +109,8 @@ model GraphicElement {
   id           String    @id @default(cuid())
   name         String
   description  String    @db.Text
+  variation    String    @default("Outro")
+  colorMode    String    @default("colorido")
   previewUrl   String?
   format       String
   colorProfile String

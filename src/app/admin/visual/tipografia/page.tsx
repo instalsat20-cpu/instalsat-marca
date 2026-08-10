@@ -3,7 +3,10 @@ import { PageTitle } from "@/components/page-title";
 import { TypographyManager } from "@/components/admin/typography-manager";
 
 export default async function AdminTipografiaPage() {
-  const fonts = await prisma.typography.findMany({ orderBy: { order: "asc" } });
+  const fonts = await prisma.typography.findMany({
+    orderBy: { order: "asc" },
+    include: { applications: { orderBy: { order: "asc" } } },
+  });
 
   return (
     <div>

@@ -18,7 +18,7 @@ export async function PUT(
 
   const { id } = await params;
   const body = await req.json();
-  const { name, type, googleFont, description, weights, downloadUrl, order } = body;
+  const { name, type, googleFont, description, weights, downloadUrl, order, applications } = body;
 
   const font = await prisma.typography.update({
     where: { id },
@@ -30,7 +30,21 @@ export async function PUT(
       weights: weights || null,
       downloadUrl: downloadUrl || null,
       order,
+      applications: {
+        deleteMany: {},
+        create: Array.isArray(applications)
+          ? applications.map((application) => ({
+              category: String(application.category).trim(),
+              weight: String(application.weight).trim(),
+              sizePx: application.sizePx ? Number(application.sizePx) : null,
+              lineHeight: application.lineHeight?.trim() || null,
+              exampleText: String(application.exampleText).trim(),
+              order: Number(application.order) || 0,
+            }))
+          : [],
+      },
     },
+    include: { applications: { orderBy: { order: "asc" } } },
   });
   return NextResponse.json({ font });
 }

@@ -7,6 +7,7 @@ import { Modal } from "@/components/admin/modal";
 import { TypographyForm } from "@/components/admin/typography-form";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
+import type { TypographyApplicationInput } from "@/components/admin/typography-form";
 
 type FontItem = {
   id: string;
@@ -17,6 +18,7 @@ type FontItem = {
   weights: string | null;
   downloadUrl: string | null;
   order: number;
+  applications: TypographyApplicationInput[];
 };
 
 export function TypographyManager({ fonts }: { fonts: FontItem[] }) {

@@ -8,6 +8,7 @@ import { LogoForm } from "@/components/admin/logo-form";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
 import type { CategoryItem } from "@/components/admin/category-manager";
+import { BatchUpload } from "@/components/admin/batch-upload";
 
 type LogoItem = {
   id: string;
@@ -44,6 +45,7 @@ export function LogosManager({
 
   return (
     <>
+      <BatchUpload context="logos" onSuccess={() => router.refresh()} />
       <div className="mb-8 flex items-center justify-end">
         <button
           onClick={() => setEditing("new")}
