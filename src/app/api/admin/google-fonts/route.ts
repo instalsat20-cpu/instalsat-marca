@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/session";
+import { prisma } from "@/lib/prisma";
 
 type GoogleFontsResponse = {
   items: { family: string; variants: string[]; category: string }[];
@@ -11,7 +12,10 @@ export async function GET() {
     return NextResponse.json({ error: "Não autorizado." }, { status: 403 });
   }
 
-  const apiKey = process.env.GOOGLE_FONTS_API_KEY;
+  const settings = await prisma.settings.findFirst({
+    select: { googleFontsApiKey: true },
+  });
+  const apiKey = settings?.googleFontsApiKey?.trim() || process.env.GOOGLE_FONTS_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
       {

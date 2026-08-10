@@ -143,4 +143,6 @@ model Settings {
   logoUrlLight String?
   fontFamily   String  @default("Rubik")
   version      String  @default("V. 1.0")
+  geminiApiKey String?
+  googleFontsApiKey String?
 }
