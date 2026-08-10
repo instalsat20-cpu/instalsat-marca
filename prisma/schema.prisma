@@ -73,6 +73,7 @@ model Typography {
 model LogoFile {
   id           String    @id @default(cuid())
   name         String
+  description  String?   @db.Text
   colorMode    String
   format       String
   colorProfile String
@@ -103,14 +104,24 @@ model GraphicElement {
 model Document {
   id          String    @id @default(cuid())
   name        String
-  description String?
+  description String?   @db.Text
   previewUrl  String?
   downloadUrl String
-  permission  String    @default("docs_basic")
+  permission  String    @default("doc_manual")
   categoryId  String?
   category    Category? @relation(fields: [categoryId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+model GuideLine {
+  id        String   @id @default(cuid())
+  title     String
+  body      String   @db.Text
+  imageUrl  String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Content {

@@ -19,6 +19,6 @@ export const NAV_ICONS: Record<string, LucideIcon> = {
   "Núcleo da Marca": Compass,
   "Universo Verbal": MessageSquareText,
   "Universo Visual": Palette,
-  "/downloads": Download,
+  "/documentos": Download,
   "/assistente": Sparkles,
 };

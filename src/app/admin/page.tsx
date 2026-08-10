@@ -12,6 +12,7 @@ export default async function AdminDashboardPage() {
     { title: "Grafismos", href: "/admin/visual/grafismos", roles: ["STUDIO"] },
     { title: "Cores", href: "/admin/visual/cores", roles: ["STUDIO"] },
     { title: "Tipografia", href: "/admin/visual/tipografia", roles: ["STUDIO"] },
+    { title: "Diretrizes de Uso", href: "/admin/visual/diretrizes", roles: ["STUDIO"] },
     { title: "Documentos", href: "/admin/documentos", roles: ["STUDIO"] },
     { title: "Conteúdo", href: "/admin/conteudo", roles: ["STUDIO"] },
     { title: "Configurações", href: "/admin/configuracoes", roles: ["STUDIO"] },

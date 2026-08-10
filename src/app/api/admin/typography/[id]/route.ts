@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/session";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 async function requireStudio() {
   const user = await getSessionUser();
@@ -25,7 +26,7 @@ export async function PUT(
       name,
       type,
       googleFont: googleFont || null,
-      description,
+      description: sanitizeHtml(description),
       weights: weights || null,
       downloadUrl: downloadUrl || null,
       order,

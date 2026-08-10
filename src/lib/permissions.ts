@@ -17,6 +17,7 @@ export const PERMISSION_GROUPS = {
     { key: "visual_tipografia", label: "Tipografia" },
     { key: "visual_grafismos", label: "Grafismos" },
     { key: "visual_fotografia", label: "Diretrizes fotográficas" },
+    { key: "visual_diretrizes", label: "Diretrizes de Uso" },
   ],
   "Downloads de logo": [
     { key: "logo_basic", label: "Logo básico (PNG, PDF)" },
@@ -26,7 +27,11 @@ export const PERMISSION_GROUPS = {
     { key: "elements_basic", label: "Grafismos básico (PNG, PDF)" },
     { key: "elements_advanced", label: "Grafismos avançado (AI, SVG, EPS)" },
   ],
-  Documentos: [{ key: "docs_basic", label: "Manual e certificado" }],
+  Documentos: [
+    { key: "doc_manual", label: "Manual de Marca" },
+    { key: "doc_diagnostico", label: "Diagnóstico da Marca" },
+    { key: "doc_registro", label: "Comprovante de Registro" },
+  ],
   Outros: [{ key: "assistente_ia", label: "Assistente de Marca (IA)" }],
 } as const;
 

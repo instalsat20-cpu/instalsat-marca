@@ -6,6 +6,16 @@
   --color-bruma: #dce3ec;
   --color-bruma-light: #eef5ff;
   --color-surface-elevated: color-mix(in srgb, var(--color-bruma-light) 8%, var(--color-petroleo));
+
+  /* Border radius scale reduced 50% from Tailwind defaults, applied globally via theme tokens */
+  --radius-xs: 0.0625rem;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.1875rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.5rem;
+  --radius-3xl: 0.75rem;
+  --radius-4xl: 1rem;
 }
 
 @theme inline {
@@ -16,6 +26,15 @@
   --color-bruma: var(--color-bruma);
   --color-bruma-light: var(--color-bruma-light);
   --color-surface-elevated: var(--color-surface-elevated);
+
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-3xl: var(--radius-3xl);
+  --radius-4xl: var(--radius-4xl);
 }
 
 body {
@@ -47,4 +66,68 @@ body {
 ::selection {
   background: var(--color-brasa);
   color: var(--color-bruma-light);
+}
+
+.prose-instalsat p {
+  margin-bottom: 0.9em;
+  font-weight: 300;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--color-bruma-light) 70%, transparent);
+}
+
+.prose-instalsat h2 {
+  margin-top: 1.1em;
+  margin-bottom: 0.5em;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--color-bruma-light);
+}
+
+.prose-instalsat h3 {
+  margin-top: 0.9em;
+  margin-bottom: 0.4em;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-bruma-light);
+}
+
+.prose-instalsat h2:first-child,
+.prose-instalsat h3:first-child {
+  margin-top: 0;
+}
+
+.prose-instalsat strong {
+  font-weight: 600;
+  color: var(--color-bruma-light);
+}
+
+.prose-instalsat ul,
+.prose-instalsat ol {
+  margin-bottom: 0.9em;
+  padding-left: 1.3em;
+  font-weight: 300;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--color-bruma-light) 70%, transparent);
+}
+
+.prose-instalsat ul {
+  list-style: disc;
+}
+
+.prose-instalsat ol {
+  list-style: decimal;
+}
+
+.prose-instalsat p:last-child,
+.prose-instalsat ul:last-child,
+.prose-instalsat ol:last-child {
+  margin-bottom: 0;
+}
+
+.prose-instalsat .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  color: color-mix(in srgb, var(--color-bruma-light) 35%, transparent);
 }

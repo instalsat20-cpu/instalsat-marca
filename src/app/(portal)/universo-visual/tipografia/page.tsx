@@ -4,87 +4,75 @@ import { hasPermission } from "@/lib/permissions";
 import { LockedCard } from "@/components/locked-card";
 import { PageTitle } from "@/components/page-title";
 import { SectionCard } from "@/components/section-card";
+import { RichText } from "@/components/rich-text";
+import { FontSpecimen } from "@/components/font-specimen";
+import { DownloadAllFontsButton } from "@/components/download-all-fonts-button";
+import { parseWeightNames, firstParagraphText } from "@/lib/font-weights";
 
 const SECTION = "visual_tipografia";
 const TITLE = "Tipografia";
 
-function googleFontsHref(family: string) {
-  const encoded = family.trim().replace(/\s+/g, "+");
-  return `https://fonts.googleapis.com/css2?family=${encoded}:wght@300;400;500;600&display=swap`;
-}
-
-function googleFontsSpecimenUrl(family: string) {
-  const encoded = family.trim().replace(/\s+/g, "+");
-  return `https://fonts.google.com/specimen/${encoded}`;
-}
+const MANIFESTO_FALLBACK =
+  "A empresa que fica, para que o essencial nunca pare.";
 
 export default async function TipografiaPage() {
   const user = await getSessionUser();
   if (!hasPermission(user, SECTION)) return <LockedCard title={TITLE} />;
 
-  const [content, fonts] = await Promise.all([
+  const [content, fonts, manifesto] = await Promise.all([
     prisma.content.findUnique({ where: { section: SECTION } }),
     prisma.typography.findMany({ orderBy: { order: "asc" } }),
+    prisma.content.findUnique({ where: { section: "verbal_manifesto" } }),
   ]);
+
+  const manifestoExcerpt = firstParagraphText(manifesto?.body, MANIFESTO_FALLBACK);
+
+  const primaryFonts = fonts.filter((f) => f.type === "primary");
+  const supportFonts = fonts.filter((f) => f.type === "support");
+  const downloadableSupportFonts = supportFonts
+    .filter((f) => f.downloadUrl)
+    .map((f) => ({ name: f.name, downloadUrl: f.downloadUrl! }));
 
   return (
     <div>
-      <PageTitle title={content?.title ?? TITLE} />
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <PageTitle title={content?.title ?? TITLE} />
+        <DownloadAllFontsButton fonts={downloadableSupportFonts} />
+      </div>
 
       {content?.body && (
-        <div className="mb-6 rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-7">
-          {content.body.split(/\n\s*\n/).map((p, i) => (
-            <p
-              key={i}
-              className="text-sm font-light leading-relaxed text-bruma-light/70"
-            >
-              {p.trim()}
-            </p>
-          ))}
+        <div className="mb-6 rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-7 text-sm">
+          <RichText html={content.body} />
         </div>
       )}
 
       <div className="space-y-4">
-        {fonts.map((font) => (
+        {primaryFonts.map((font) => (
           <SectionCard key={font.id} title={font.name}>
-            <p>{font.description}</p>
+            <RichText html={font.description} />
             {font.weights && (
               <p className="text-xs font-medium tracking-wide text-bruma-light/40">
                 Pesos: {font.weights}
               </p>
             )}
-
-            {font.googleFont && (
-              <>
-                <link rel="stylesheet" href={googleFontsHref(font.googleFont)} />
-                <div
-                  className="rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-5 py-6 text-3xl text-bruma-light"
-                  style={{ fontFamily: `'${font.googleFont}', sans-serif` }}
-                >
-                  Aa Instalsat
-                </div>
-                <a
-                  href={googleFontsSpecimenUrl(font.googleFont)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block text-sm font-medium text-brasa"
-                >
-                  Ver no Google Fonts →
-                </a>
-              </>
-            )}
-
-            {font.downloadUrl && (
-              <a
-                href={font.downloadUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block rounded-xl bg-brasa px-4 py-2.5 text-sm font-medium text-bruma-light transition hover:opacity-90"
-              >
-                Baixar fonte
-              </a>
-            )}
+            <p className="rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-4 py-3 text-sm font-light text-bruma-light/50">
+              Esta fonte é exclusiva do logotipo e não está disponível para download.
+            </p>
           </SectionCard>
+        ))}
+
+        {supportFonts.map((font, i) => (
+          <div key={font.id}>
+            {i > 0 && <div className="my-8 h-px bg-bruma-light/10" />}
+            <SectionCard title={font.name}>
+              <RichText html={font.description} />
+              <FontSpecimen
+                family={font.googleFont!}
+                weightNames={parseWeightNames(font.weights)}
+                manifestoExcerpt={manifestoExcerpt}
+              />
+            </SectionCard>
+          </div>
         ))}
 
         {fonts.length === 0 && (

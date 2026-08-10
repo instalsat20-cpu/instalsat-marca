@@ -39,9 +39,10 @@ export const NAV: NavGroup[] = [
       { label: "Tipografia", href: "/universo-visual/tipografia", permission: "visual_tipografia" },
       { label: "Grafismos", href: "/universo-visual/grafismos", permission: "visual_grafismos" },
       { label: "Diretrizes fotográficas", href: "/universo-visual/diretrizes-fotograficas", permission: "visual_fotografia" },
+      { label: "Diretrizes de Uso", href: "/universo-visual/diretrizes", permission: "visual_diretrizes" },
     ],
   },
-  { label: "Downloads", href: "/downloads" },
+  { label: "Documentos", href: "/documentos" },
   { label: "Assistente de Marca (IA)", href: "/assistente", permission: "assistente_ia" },
 ];
 
@@ -53,7 +54,7 @@ export const home = {
     { title: "Núcleo da Marca", href: "/nucleo-da-marca/posicionamento" },
     { title: "Universo Verbal", href: "/universo-verbal/manifesto" },
     { title: "Universo Visual", href: "/universo-visual/simbolo-e-logotipo" },
-    { title: "Downloads", href: "/downloads" },
+    { title: "Documentos", href: "/documentos" },
     { title: "Assistente de Marca", href: "/assistente" },
   ],
 };

@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { UploadField } from "@/components/admin/upload-field";
 import { Dropdown } from "@/components/ui/dropdown";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import type { CategoryItem } from "@/components/admin/category-manager";
 
 type ExistingLogo = {
   id: string;
   name: string;
+  description: string | null;
   categoryId: string | null;
   colorMode: string;
   format: string;
@@ -45,6 +47,7 @@ export function LogoForm({
   const isEdit = !!existing;
 
   const [name, setName] = useState(existing?.name ?? "");
+  const [description, setDescription] = useState(existing?.description ?? "");
   const [categoryId, setCategoryId] = useState(existing?.categoryId ?? "");
   const [colorMode, setColorMode] = useState(existing?.colorMode ?? "colorido");
   const [format, setFormat] = useState(existing?.format ?? "PNG");
@@ -74,6 +77,7 @@ export function LogoForm({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name,
+            description,
             categoryId: categoryId || null,
             colorMode,
             format,
@@ -116,6 +120,13 @@ export function LogoForm({
             options={categories.map((c) => ({ value: c.id, label: c.name }))}
           />
         </div>
+      </div>
+
+      <div>
+        <label className="mb-1 block text-sm font-medium text-bruma-light/70">
+          Descrição (opcional)
+        </label>
+        <RichTextEditor value={description ?? ""} onChange={setDescription} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

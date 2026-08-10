@@ -1,5 +1,6 @@
 import { PageTitle } from "@/components/page-title";
 import { SectionCard } from "@/components/section-card";
+import { RichText } from "@/components/rich-text";
 
 export function ContentBody({
   title,
@@ -8,17 +9,14 @@ export function ContentBody({
   title: string;
   body: string;
 }) {
-  const paragraphs = body
-    .split(/\n\s*\n/)
-    .map((p) => p.trim())
-    .filter(Boolean);
+  const hasBody = !!body?.trim();
 
   return (
     <div>
       <PageTitle title={title} />
       <SectionCard>
-        {paragraphs.length > 0 ? (
-          paragraphs.map((p, i) => <p key={i}>{p}</p>)
+        {hasBody ? (
+          <RichText html={body} />
         ) : (
           <p className="text-bruma-light/40">
             Conteúdo ainda não cadastrado para esta seção.

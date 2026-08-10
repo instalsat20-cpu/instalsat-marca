@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/session";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 async function requireStudio() {
   const user = await getSessionUser();
@@ -30,7 +31,7 @@ export async function POST(req: Request) {
     data: {
       name,
       categoryId: categoryId || null,
-      description,
+      description: sanitizeHtml(description),
       format,
       colorProfile,
       previewUrl: previewUrl || null,

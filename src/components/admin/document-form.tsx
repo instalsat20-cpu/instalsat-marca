@@ -3,7 +3,14 @@
 import { useState } from "react";
 import { UploadField } from "@/components/admin/upload-field";
 import { Dropdown } from "@/components/ui/dropdown";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import type { CategoryItem } from "@/components/admin/category-manager";
+
+const PERMISSIONS = [
+  { value: "doc_manual", label: "Manual de Marca" },
+  { value: "doc_diagnostico", label: "Diagnóstico da Marca" },
+  { value: "doc_registro", label: "Comprovante de Registro" },
+];
 
 type ExistingDocument = {
   id: string;
@@ -31,7 +38,7 @@ export function DocumentForm({
   const [description, setDescription] = useState(existing?.description ?? "");
   const [previewUrl, setPreviewUrl] = useState(existing?.previewUrl ?? "");
   const [downloadUrl, setDownloadUrl] = useState(existing?.downloadUrl ?? "");
-  const [permission] = useState(existing?.permission ?? "docs_basic");
+  const [permission, setPermission] = useState(existing?.permission ?? "doc_manual");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -100,11 +107,18 @@ export function DocumentForm({
         <label className="mb-1 block text-sm font-medium text-bruma-light/70">
           Descrição (opcional)
         </label>
-        <textarea
-          rows={3}
-          value={description ?? ""}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2.5 text-sm text-bruma-light outline-none"
+        <RichTextEditor value={description ?? ""} onChange={setDescription} />
+      </div>
+
+      <div>
+        <label className="mb-1 block text-sm font-medium text-bruma-light/70">
+          Permissão necessária
+        </label>
+        <Dropdown
+          className="sm:w-64"
+          value={permission}
+          onChange={setPermission}
+          options={PERMISSIONS}
         />
       </div>
 

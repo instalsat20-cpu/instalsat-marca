@@ -12,6 +12,7 @@ import type { CategoryItem } from "@/components/admin/category-manager";
 type LogoItem = {
   id: string;
   name: string;
+  description: string | null;
   categoryId: string | null;
   category: { name: string } | null;
   colorMode: string;

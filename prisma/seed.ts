@@ -54,9 +54,6 @@ async function seedCategories() {
     { name: "Arco-Atmosfera", type: "graphic", order: 0 },
     { name: "Arco-Máscara", type: "graphic", order: 1 },
     { name: "Quadrado-Frame", type: "graphic", order: 2 },
-    { name: "Manual", type: "document", order: 0 },
-    { name: "Certificado", type: "document", order: 1 },
-    { name: "Outros", type: "document", order: 2 },
   ];
 
   for (const cat of categories) {
@@ -67,7 +64,67 @@ async function seedCategories() {
     });
   }
 
-  console.log(`Categorias seedadas: ${categories.length}`);
+  // Document categories were renamed to match the new doc_* permission keys.
+  // Rename existing rows in place (preserves category links on existing documents)
+  // instead of upserting new ones, which would leave orphaned old-named rows.
+  const documentCategoryRenames: { from: string; to: string; order: number }[] = [
+    { from: "Manual", to: "Manual de Marca", order: 0 },
+    { from: "Certificado", to: "Diagnóstico da Marca", order: 1 },
+    { from: "Outros", to: "Comprovante de Registro", order: 2 },
+  ];
+
+  for (const { from, to, order } of documentCategoryRenames) {
+    const existingOld = await prisma.category.findUnique({
+      where: { type_name: { type: "document", name: from } },
+    });
+    if (existingOld) {
+      await prisma.category.update({ where: { id: existingOld.id }, data: { name: to, order } });
+    } else {
+      await prisma.category.upsert({
+        where: { type_name: { type: "document", name: to } },
+        update: { order },
+        create: { name: to, type: "document", order },
+      });
+    }
+  }
+
+  console.log(`Categorias seedadas: ${categories.length + documentCategoryRenames.length}`);
+}
+
+async function seedGuidelines() {
+  const guidelines = [
+    {
+      title: "Grid de construção",
+      body: "<p>O símbolo é construído sobre um grid modular que define a proporção entre o arco e o quadrado. Todas as reproduções devem respeitar essa proporção, sem distorções.</p>",
+      order: 0,
+    },
+    {
+      title: "Margem de segurança",
+      body: "<p>Mantenha ao redor do símbolo uma área livre equivalente à altura do quadrado central. Nenhum elemento gráfico, texto ou borda deve invadir essa margem.</p>",
+      order: 1,
+    },
+    {
+      title: "Usos corretos",
+      body: "<p>Utilize sempre os arquivos oficiais, nas cores e proporções originais, sobre fundos que garantam contraste suficiente.</p>",
+      order: 2,
+    },
+    {
+      title: "Usos incorretos",
+      body: "<p>Não distorça, rotacione, recorte ou altere as cores do símbolo. Não aplique sombras, contornos ou efeitos que não constem no manual.</p>",
+      order: 3,
+    },
+  ];
+
+  for (const g of guidelines) {
+    const existing = await prisma.guideLine.findFirst({ where: { title: g.title } });
+    if (existing) {
+      await prisma.guideLine.update({ where: { id: existing.id }, data: g });
+    } else {
+      await prisma.guideLine.create({ data: g });
+    }
+  }
+
+  console.log(`Diretrizes seedadas: ${guidelines.length}`);
 }
 
 async function seedTypography() {
@@ -137,7 +194,7 @@ async function seedContent() {
         "Público-alvo prioritário: síndicos profissionais, administradoras de condomínios e construtoras.",
         "O que nos diferencia não é um serviço ou um preço. É a permanência.",
         "O setor de segurança eletrônica comunica de forma previsível: azul corporativo, vermelho de urgência, cadeados, escudos, raios, câmeras estilizadas. A identidade da Instalsat precisava resolver duas tensões: maturidade suficiente para passar credibilidade a uma administradora exigente, e proximidade suficiente para o síndico ligar no sábado. E ainda abandonar os códigos genéricos do setor para ocupar um território visual vazio.",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "nucleo_proposito",
@@ -147,7 +204,7 @@ async function seedContent() {
         "Como: presença contínua, diagnóstico antes da falha, resposta quando acontece, manutenção ao longo do tempo.",
         "O quê: segurança eletrônica, instalações e manutenção elétrica. Desde 1998.",
         "Para que o essencial nunca pare.",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "nucleo_arquetipos",
@@ -160,7 +217,7 @@ async function seedContent() {
         "A Instalsat opera com dois arquétipos em proporções diferentes: 65 a 70% Prestativo (Cuidador) e 30 a 35% Governante. O resultado é uma marca que não é afetuosa demais para sentar à mesa com uma construtora, nem fria demais para o síndico ligar quatro anos depois. Próxima, estruturada e madura.",
         "Como o Prestativo se manifesta: manutenção recorrente, atendimento que não some, técnico que tira o sapato antes de entrar, ligação antes do cliente ligar.",
         "Como o Governante se manifesta: documentação completa, orçamento detalhado, operação que não depende de uma única pessoa, responsabilidade civil e fiscal como condição de operação (não como diferencial de marketing).",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "nucleo_valores",
@@ -171,7 +228,7 @@ async function seedContent() {
         "Honestidade técnica: não vender medo. Não inflar orçamento. Diagnosticar o que precisa, apresentar com clareza, executar conforme o combinado. Se algo não precisa ser feito, a empresa diz isso.",
         "Cuidado: tratar o projeto do cliente como se fosse o próprio. O funcionário tira o sapato. O carro está limpo. O orçamento está bem formatado. O fio está organizado. Cuidado é atenção ao que parece detalhe mas define percepção.",
         "Consistência: entregar o mesmo nível hoje, amanhã e daqui a cinco anos. É o que permite à administradora indicar de olho fechado. É o valor mais raro do mercado.",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "nucleo_publico",
@@ -181,7 +238,7 @@ async function seedContent() {
         "Administradoras de condomínios: indicam fornecedores para toda a carteira. Uma boa experiência se multiplica. Uma má experiência elimina o fornecedor de toda a base.",
         "Construtoras: projetos de maior porte, ticket elevado, exigência técnica alta.",
         "O que esse público não aceita: fornecedor que some após a entrega, dependência do dono para qualquer decisão, informalidade no processo.",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "verbal_manifesto",
@@ -197,7 +254,7 @@ async function seedContent() {
         "Há quase trinta anos, fazemos a mesma coisa: garantir que o que precisa funcionar, funcione. Sem alarme falso. Sem promessa vazia. Sem faz de conta.",
         "Para que o essencial nunca pare.",
         "Instalsat.",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "verbal_tomdevoz",
@@ -207,7 +264,7 @@ async function seedContent() {
         "A voz é: direta sem ser seca, técnica sem ser inacessível, próxima sem ser informal, firme sem ser arrogante.",
         "Como a Instalsat fala: frases curtas, ideias completas. Nunca usa jargão para impressionar. Nunca usa diminutivo para parecer simpática. Assume quando não sabe, resolve quando pode. Confirma o que foi combinado, avisa quando algo muda.",
         "Como a Instalsat não fala: sem \"prezado\", \"atenciosamente\", linguagem de ofício. Sem termos técnicos sem explicação. Sem promessas que não pode cumprir. Sem \"qualidade\" como resposta para qualquer pergunta.",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "verbal_vocabulario",
@@ -216,7 +273,7 @@ async function seedContent() {
         "Palavras que pertencem à marca: presença, continuidade, cuidado, estrutura, manutenção, diagnóstico, permanência, responsabilidade, recorrente, técnico.",
         "Palavras que a marca evita: urgente (sem contexto real), garantido (sem evidência), premium (como adjetivo vazio), qualidade (isolada), parceria (sem entrega concreta), inovação (como buzzword).",
         "Termos fixos, não são variações criativas e não se adaptam por contexto: \"A empresa que fica\" (a verdade). \"Para que o essencial nunca pare\" (propósito). \"Parceiro Estruturado\" (posicionamento).",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "visual_simbolo",
@@ -229,7 +286,7 @@ async function seedContent() {
         "O detalhe que torna o símbolo proprietário: o topo do quadrado se alinha com exatidão à abertura do arco. As terminações do arco são chapadas, com cortes geométricos limpos. É onde Cuidador e Governante param de ser arquétipos separados e viram um único gesto.",
         "A logotipia: baseada na Nortica Grotesk Semibold com modificações exclusivas, terminações chapadas nas letras de curvatura (principalmente 's' e 'a'), ligatura entre 's' e 't' que representa conexão (Cuidador), ajustes de kerning letra a letra. A versão Instalsat não existe em nenhuma fonte de prateleira. A Nortica original existe no mercado. A versão Instalsat não.",
         "Versões: horizontal, símbolo à esquerda e logotipia à direita, configuração padrão para espaços largos. Vertical, símbolo acima e logotipia abaixo, configuração de exceção para espaços altos e estreitos.",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "visual_cores",
@@ -239,7 +296,7 @@ async function seedContent() {
         "Petróleo carrega o Governante: estabilidade, maturidade, presença sólida. É o fundo institucional, a atmosfera onde a Instalsat aparece em contextos controlados.",
         "Brasa carrega o Prestativo: calor humano, presença próxima. É a temperatura que impede a marca de soar fria. Aparece pontualmente, no símbolo, em destaques, no ponto final dos títulos. Nunca como fundo dominante.",
         "Bruma é o ambiente onde Petróleo e Brasa respiram. Substitui o branco puro, cria atmosfera, não esterilidade.",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "visual_tipografia",
@@ -248,7 +305,7 @@ async function seedContent() {
         "Rubik é uma sans-serif de estrutura geométrica e terminações arredondadas. Disciplinada o suficiente para sustentar a maturidade institucional, humana o suficiente para não soar corporativa distante. A estrutura geométrica carrega o Governante, as terminações arredondadas carregam o Prestativo.",
         "Por que não a Nortica no corpo do texto: por ser diferente do logotipo, que opera com terminações chapadas exclusivas, a Rubik mantém o logo único em sua aplicação. Assinatura de um lado, voz cotidiana do outro.",
         "Regra de expansão óptica: em fundos escuros (Petróleo), textos em Brasa ou Bruma sofrem expansão óptica, a cor clara sobre fundo escuro faz a fonte parecer mais grossa do que é. Por isso, em fundos escuros, cada elemento desce um peso. Pesos Bold e acima ficam fora do sistema.",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "visual_grafismos",
@@ -258,7 +315,7 @@ async function seedContent() {
         "Arco-Atmosfera: em variação tonal sobre Petróleo, o arco vira moldura de fundo em superfícies grandes, hero de site, capa de proposta, slide de apresentação.",
         "Arco-Máscara: em escala ampliada sobre fotografias, o arco recorta a imagem. O que fica dentro do arco é o que a marca envolve.",
         "Quadrado-Frame: em Brasa, o quadrado do símbolo vira frame para fotografias e crachás. Quem trabalha sob a marca, trabalha dentro dela.",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
     {
       section: "visual_fotografia",
@@ -268,7 +325,7 @@ async function seedContent() {
         "Locações: sempre lidas como ambientes brasileiros sofisticados e urbanos. Nunca genéricas ou europeias.",
         "O que evitar: fotos de banco genéricas, fundos brancos de estúdio para contexto institucional, imagens que remetam a MEI ou trabalho informal.",
         "Paleta fotográfica: tons quentes-neutros, luz natural controlada, ambientes com acabamento premium (ACM, porcelana, vegetação tropical, gates eletrônicos).",
-      ].join("\n\n"),
+      ].map((paragraph) => `<p>${paragraph}</p>`).join(""),
     },
   ];
 
@@ -290,6 +347,7 @@ async function main() {
   await seedTypography();
   await seedSettings();
   await seedContent();
+  await seedGuidelines();
 }
 
 main()

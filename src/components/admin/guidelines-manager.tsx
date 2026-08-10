@@ -1,0 +1,84 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Pencil, Plus } from "lucide-react";
+import { Modal } from "@/components/admin/modal";
+import { GuidelineForm } from "@/components/admin/guideline-form";
+import { DeleteButton } from "@/components/admin/delete-button";
+import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
+
+type GuidelineItem = {
+  id: string;
+  title: string;
+  body: string;
+  imageUrl: string | null;
+  order: number;
+};
+
+export function GuidelinesManager({ guidelines }: { guidelines: GuidelineItem[] }) {
+  const router = useRouter();
+  const [editing, setEditing] = useState<GuidelineItem | "new" | null>(null);
+
+  function close() {
+    setEditing(null);
+  }
+
+  function handleSuccess() {
+    close();
+    router.refresh();
+  }
+
+  return (
+    <>
+      <div className="mb-8 flex items-center justify-end">
+        <button
+          onClick={() => setEditing("new")}
+          className="flex items-center gap-2 rounded-xl bg-brasa px-4 py-2.5 text-sm font-medium text-bruma-light transition hover:opacity-90"
+        >
+          <Plus size={16} />
+          Nova diretriz
+        </button>
+      </div>
+
+      <StaggerGrid className="space-y-3">
+        {guidelines.map((g) => (
+          <StaggerItem
+            key={g.id}
+            hover={false}
+            className="flex items-center gap-4 rounded-2xl border border-bruma-light/10 bg-bruma-light/[0.04] p-4"
+          >
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-bruma-light">{g.title}</p>
+              <p className="text-xs font-light text-bruma-light/45">Ordem {g.order}</p>
+            </div>
+            <button
+              onClick={() => setEditing(g)}
+              className="flex size-8 shrink-0 items-center justify-center rounded-lg text-bruma-light/50 transition hover:bg-bruma-light/10 hover:text-bruma-light"
+            >
+              <Pencil size={16} />
+            </button>
+            <DeleteButton url={`/api/admin/guidelines/${g.id}`} confirmLabel="Excluir?" />
+          </StaggerItem>
+        ))}
+      </StaggerGrid>
+
+      {guidelines.length === 0 && (
+        <p className="text-sm font-light text-bruma-light/40">Nenhuma diretriz cadastrada.</p>
+      )}
+
+      <Modal
+        open={editing !== null}
+        title={editing === "new" ? "Nova diretriz" : editing ? `Editar ${editing.title}` : ""}
+        onClose={close}
+      >
+        {editing && (
+          <GuidelineForm
+            existing={editing === "new" ? undefined : editing}
+            onSuccess={handleSuccess}
+          />
+        )}
+      </Modal>
+    </>
+  );
+}

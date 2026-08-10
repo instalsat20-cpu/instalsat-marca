@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/session";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 async function requireStudio() {
   const user = await getSessionUser();
@@ -17,12 +18,13 @@ export async function PUT(
 
   const { id } = await params;
   const body = await req.json();
-  const { name, categoryId, colorMode, format, colorProfile, previewUrl, downloadUrl, permission } = body;
+  const { name, description, categoryId, colorMode, format, colorProfile, previewUrl, downloadUrl, permission } = body;
 
   const logo = await prisma.logoFile.update({
     where: { id },
     data: {
       name,
+      description: description ? sanitizeHtml(description) : null,
       categoryId: categoryId || null,
       colorMode,
       format,

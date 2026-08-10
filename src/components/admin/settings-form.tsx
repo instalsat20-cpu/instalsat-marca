@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { UploadField } from "@/components/admin/upload-field";
+import { FontPicker } from "@/components/admin/font-picker";
 
 type ExistingSettings = {
   brandName: string;
@@ -106,12 +107,7 @@ export function SettingsForm({ existing }: { existing: ExistingSettings }) {
           <label className="mb-1 block text-sm font-medium text-bruma-light/70">
             Fonte (Google Fonts)
           </label>
-          <input
-            required
-            value={fontFamily}
-            onChange={(e) => setFontFamily(e.target.value)}
-            className="w-full rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2.5 text-sm text-bruma-light outline-none"
-          />
+          <FontPicker value={fontFamily} onChange={setFontFamily} />
         </div>
       </div>
 
@@ -121,6 +117,26 @@ export function SettingsForm({ existing }: { existing: ExistingSettings }) {
         {colorField("Fundo claro", bgLight, setBgLight)}
         {colorField("Fundo médio", bgMedium, setBgMedium)}
       </div>
+
+      {fontFamily && (
+        <div className="rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-5 py-4">
+          <p className="mb-2 text-xs font-medium tracking-wide text-bruma-light/40">
+            Pré-visualização
+          </p>
+          <p
+            className="text-2xl text-bruma-light"
+            style={{ fontFamily: `'${fontFamily}', sans-serif` }}
+          >
+            {brandName || "Instalsat"}
+          </p>
+          <p
+            className="mt-1 text-sm text-bruma-light/60"
+            style={{ fontFamily: `'${fontFamily}', sans-serif` }}
+          >
+            Aa Bb Cc — Biblioteca de marca
+          </p>
+        </div>
+      )}
 
       <UploadField label="Logo (opcional)" value={logoUrl} onChange={setLogoUrl} />
 

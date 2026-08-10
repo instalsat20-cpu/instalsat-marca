@@ -12,6 +12,7 @@ import {
   FileEdit,
   Settings,
   ExternalLink,
+  BookOpen,
 } from "lucide-react";
 import { NavHover } from "@/components/motion/nav-hover";
 
@@ -40,6 +41,7 @@ export function AdminSidebar({
       { label: "Grafismos", href: "/admin/visual/grafismos", icon: Shapes },
       { label: "Cores", href: "/admin/visual/cores", icon: Palette },
       { label: "Tipografia", href: "/admin/visual/tipografia", icon: Type },
+      { label: "Diretrizes de Uso", href: "/admin/visual/diretrizes", icon: BookOpen },
       { label: "Documentos", href: "/admin/documentos", icon: FileText },
       { label: "Conteúdo", href: "/admin/conteudo", icon: FileEdit },
       { label: "Configurações", href: "/admin/configuracoes", icon: Settings }

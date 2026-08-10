@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/session";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 async function requireStudio() {
   const user = await getSessionUser();
@@ -21,7 +22,7 @@ export async function POST(req: Request) {
   if (!user) return NextResponse.json({ error: "Não autorizado." }, { status: 403 });
 
   const body = await req.json();
-  const { name, categoryId, colorMode, format, colorProfile, previewUrl, downloadUrl, permission } = body;
+  const { name, description, categoryId, colorMode, format, colorProfile, previewUrl, downloadUrl, permission } = body;
   if (!name || !colorMode || !format || !colorProfile || !downloadUrl) {
     return NextResponse.json({ error: "Campos obrigatórios ausentes." }, { status: 400 });
   }
@@ -29,6 +30,7 @@ export async function POST(req: Request) {
   const logo = await prisma.logoFile.create({
     data: {
       name,
+      description: description ? sanitizeHtml(description) : null,
       categoryId: categoryId || null,
       colorMode,
       format,

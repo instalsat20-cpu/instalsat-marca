@@ -4,6 +4,8 @@ import { hasPermission } from "@/lib/permissions";
 import { LockedCard } from "@/components/locked-card";
 import { PageTitle } from "@/components/page-title";
 import { DownloadGallery } from "@/components/download-gallery";
+import { RichText } from "@/components/rich-text";
+import { stripHtml } from "@/lib/sanitize";
 
 const SECTION = "visual_grafismos";
 const TITLE = "Grafismos";
@@ -25,7 +27,7 @@ export default async function GrafismosPage() {
     group: el.category?.name ?? "Sem categoria",
     format: el.format,
     colorProfile: el.colorProfile,
-    subtitle: el.description,
+    subtitle: stripHtml(el.description),
     previewUrl: el.previewUrl,
     downloadUrl: el.downloadUrl,
   }));
@@ -35,15 +37,8 @@ export default async function GrafismosPage() {
       <PageTitle title={content?.title ?? TITLE} />
 
       {content?.body && (
-        <div className="mb-6 rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-7">
-          {content.body.split(/\n\s*\n/).map((p, i) => (
-            <p
-              key={i}
-              className="text-sm font-light leading-relaxed text-bruma-light/70"
-            >
-              {p.trim()}
-            </p>
-          ))}
+        <div className="mb-6 rounded-3xl border border-bruma-light/10 bg-bruma-light/[0.04] p-7 text-sm">
+          <RichText html={content.body} />
         </div>
       )}
 

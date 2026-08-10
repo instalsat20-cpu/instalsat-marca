@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { UploadField } from "@/components/admin/upload-field";
 import { Dropdown } from "@/components/ui/dropdown";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import type { CategoryItem } from "@/components/admin/category-manager";
 
 type ExistingElement = {
@@ -114,13 +115,7 @@ export function ElementForm({
 
       <div>
         <label className="mb-1 block text-sm font-medium text-bruma-light/70">Descrição</label>
-        <textarea
-          required
-          rows={3}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2.5 text-sm text-bruma-light outline-none"
-        />
+        <RichTextEditor value={description} onChange={setDescription} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

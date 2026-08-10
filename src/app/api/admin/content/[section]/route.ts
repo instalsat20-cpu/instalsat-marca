@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/session";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 export async function PUT(
   req: Request,
@@ -19,10 +20,12 @@ export async function PUT(
     return NextResponse.json({ error: "Título é obrigatório." }, { status: 400 });
   }
 
+  const sanitized = sanitizeHtml(text ?? "");
+
   const content = await prisma.content.upsert({
     where: { section },
-    update: { title, body: text ?? "" },
-    create: { section, title, body: text ?? "" },
+    update: { title, body: sanitized },
+    create: { section, title, body: sanitized },
   });
 
   return NextResponse.json({ content });

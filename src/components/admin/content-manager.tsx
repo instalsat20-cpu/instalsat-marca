@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Pencil } from "lucide-react";
 import { Modal } from "@/components/admin/modal";
 import { StaggerGrid, StaggerItem } from "@/components/motion/stagger";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 
 type Section = {
   key: string;
@@ -94,11 +95,11 @@ export function ContentManager({ sections }: { sections: Section[] }) {
             <label className="mb-1 block text-xs font-medium tracking-wide text-bruma-light/40">
               Corpo do texto
             </label>
-            <textarea
-              rows={12}
+            <RichTextEditor
               value={body}
-              onChange={(e) => setBody(e.target.value)}
-              className="w-full rounded-xl border border-bruma-light/10 bg-bruma-light/5 px-3 py-2.5 text-sm leading-relaxed text-bruma-light outline-none"
+              onChange={setBody}
+              placeholder="Escreva o conteúdo desta seção..."
+              minHeight={240}
             />
           </div>
 
