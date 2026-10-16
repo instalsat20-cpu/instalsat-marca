@@ -1,13 +1,4 @@
-import DOMPurify from "dompurify";
-
-function getPurify() {
-  if (typeof window !== "undefined") return DOMPurify(window);
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { JSDOM } = require("jsdom");
-  const { window: domWindow } = new JSDOM("");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return DOMPurify(domWindow as any);
-}
+import sanitize from "sanitize-html";
 
 const ALLOWED_TAGS = [
   "p",
@@ -21,9 +12,12 @@ const ALLOWED_TAGS = [
   "br",
 ];
 
+// Pure-JS sanitizer: jsdom/DOMPurify breaks in Vercel's serverless runtime.
 export function sanitizeHtml(html: string): string {
-  const purify = getPurify();
-  return purify.sanitize(html ?? "", { ALLOWED_TAGS, ALLOWED_ATTR: [] });
+  return sanitize(html ?? "", {
+    allowedTags: ALLOWED_TAGS,
+    allowedAttributes: {},
+  });
 }
 
 export function stripHtml(html: string | null | undefined): string {

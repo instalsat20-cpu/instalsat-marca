@@ -2,8 +2,42 @@
 
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import ReactMarkdown from "react-markdown";
 import { assistente } from "@/lib/content";
 import { PageTitle } from "@/components/page-title";
+
+const markdownComponents = {
+  h1: ({ children }: { children?: React.ReactNode }) => (
+    <h2 className="mb-2 mt-4 text-lg font-semibold text-bruma-light first:mt-0">{children}</h2>
+  ),
+  h2: ({ children }: { children?: React.ReactNode }) => (
+    <h3 className="mb-1 mt-3 text-base font-semibold text-bruma-light first:mt-0">{children}</h3>
+  ),
+  h3: ({ children }: { children?: React.ReactNode }) => (
+    <p className="mb-1 mt-2 text-sm font-medium text-bruma-light first:mt-0">{children}</p>
+  ),
+  strong: ({ children }: { children?: React.ReactNode }) => (
+    <strong className="font-semibold text-bruma-light">{children}</strong>
+  ),
+  em: ({ children }: { children?: React.ReactNode }) => <em className="italic">{children}</em>,
+  p: ({ children }: { children?: React.ReactNode }) => <p className="mb-2 last:mb-0">{children}</p>,
+  ul: ({ children }: { children?: React.ReactNode }) => (
+    <ul className="mb-2 list-disc space-y-1 pl-4">{children}</ul>
+  ),
+  ol: ({ children }: { children?: React.ReactNode }) => (
+    <ol className="mb-2 list-decimal space-y-1 pl-4">{children}</ol>
+  ),
+  li: ({ children }: { children?: React.ReactNode }) => <li className="text-sm">{children}</li>,
+  hr: () => <hr className="my-3 border-bruma-light/10" />,
+  code: ({ children }: { children?: React.ReactNode }) => (
+    <code className="rounded bg-black/20 px-1 py-0.5 font-mono text-xs">{children}</code>
+  ),
+  a: ({ children, href }: { children?: React.ReactNode; href?: string }) => (
+    <a href={href} target="_blank" rel="noreferrer" className="underline hover:text-brasa">
+      {children}
+    </a>
+  ),
+};
 
 type Message = { role: "user" | "model"; content: string };
 
@@ -105,7 +139,11 @@ function AssistantChatInner() {
                       : "border border-bruma-light/10 bg-bruma-light/5 font-light text-bruma-light/85"
                   }`}
                 >
-                  {m.content}
+                  {m.role === "model" ? (
+                    <ReactMarkdown components={markdownComponents}>{m.content}</ReactMarkdown>
+                  ) : (
+                    m.content
+                  )}
                 </div>
               </div>
             ))}
