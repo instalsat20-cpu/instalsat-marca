@@ -28,12 +28,9 @@
     "@tiptap/react": "^3.29.2",
     "@tiptap/starter-kit": "^3.29.2",
     "@types/bcryptjs": "^2.4.6",
-    "@types/dompurify": "^3.0.5",
-    "@types/jsdom": "^30.0.0",
+    "@types/sanitize-html": "^2.16.2",
     "bcryptjs": "^3.0.3",
-    "dompurify": "^3.4.13",
     "framer-motion": "^13.0.0",
-    "jsdom": "^30.0.1",
     "lucide-react": "^1.30.0",
     "next": "^15.5.23",
     "next-auth": "^4.24.15",
@@ -41,7 +38,8 @@
     "prisma": "^7.9.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "react-markdown": "^10.1.0"
+    "react-markdown": "^10.1.0",
+    "sanitize-html": "^2.18.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.6",
